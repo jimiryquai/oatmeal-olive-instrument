@@ -36,6 +36,10 @@ export default defineConfig({
 					"emdash/media/local-runtime",
 					"@emdash-cms/cloudflare/db/d1",
 					"@emdash-cms/cloudflare/storage/r2",
+					"emdash/ui",
+					"emdash/runtime",
+					"emdash/routes/PluginRegistry",
+					"astro/zod",
 				],
 			},
 		},
@@ -81,6 +85,7 @@ export default defineConfig({
 					// can resolve this at build time (relative paths fail because
 					// the virtual module has no on-disk location to anchor them).
 					entrypoint: new URL("./src/plugins/marketing-blocks/index.ts", import.meta.url).href,
+					adminEntry: new URL("./src/plugins/marketing-blocks/admin.tsx", import.meta.url).href,
 				},
 			],
 		}),

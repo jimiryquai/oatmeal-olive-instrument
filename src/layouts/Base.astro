@@ -15,16 +15,37 @@ import PlainButtonLink from '@/components/elements/PlainButtonLink.astro';
 import XIcon from "@/components/icons/social/x-icon.astro";
 import GitHubIcon from "@/components/icons/social/github-icon.astro";
 import YouTubeIcon from "@/components/icons/social/youtube-icon.astro";
+import logoOlive from "@/assets/logos/oatmeal-instrument-color-olive-950.svg";
+import logoWhite from "@/assets/logos/oatmeal-instrument-color-white.svg";
 import "../styles/globals.css";
 
 interface Props {
 	title?: string;
+	pageTitle?: string;
 	description?: string;
 	image?: string;
+	canonical?: string | null;
+	robots?: string | null;
+	type?: string;
+	publishedTime?: string | null;
+	modifiedTime?: string | null;
+	content?: { collection: string; id: string; slug?: string | null };
 	hideHeaderFooter?: boolean;
 }
 
-const { title, description, image, hideHeaderFooter = false } = Astro.props;
+const {
+	title,
+	pageTitle,
+	description,
+	image,
+	canonical,
+	robots,
+	type = "website",
+	publishedTime,
+	modifiedTime,
+	content,
+	hideHeaderFooter = false,
+} = Astro.props;
 const settings = hideHeaderFooter ? null : await getSiteSettings();
 const siteTitle = settings?.title || "Oatmeal";
 const fullTitle = title ? `${title} — ${siteTitle}` : siteTitle;
@@ -46,14 +67,18 @@ const [primaryMenu, footerProduct, footerCompany, footerResources, footerLegal] 
 const pageCtx = createPublicPageContext({
 	Astro,
 	kind: "custom",
-	pageType: "website",
+	pageType: type,
 	title: fullTitle,
-	pageTitle: title ?? siteTitle,
+	pageTitle: pageTitle ?? title ?? siteTitle,
 	description: description || siteDescription,
-	canonical: Astro.url.href,
+	canonical: canonical || Astro.url.href,
 	image,
-	seo: { ogImage: image },
+	seo: {
+		ogImage: image,
+		robots: robots || undefined,
+	},
 	siteName: siteTitle,
+	content,
 });
 ---
 
@@ -64,6 +89,12 @@ const pageCtx = createPublicPageContext({
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>{fullTitle}</title>
 		<EmDashHead page={pageCtx} />
+		{type === "article" && publishedTime && (
+			<meta property="article:published_time" content={publishedTime} />
+		)}
+		{type === "article" && modifiedTime && (
+			<meta property="article:modified_time" content={modifiedTime} />
+		)}
 		<script is:inline>
 			// Apply theme immediately to prevent flash
 			(function () {
@@ -99,7 +130,7 @@ const pageCtx = createPublicPageContext({
 					{
 						!siteLogo && (
 							<img
-								src="/img/logos/oatmeal-instrument-color-olive-950.svg"
+								src={logoOlive.src}
 								alt={siteTitle}
 								class="dark:hidden h-7 w-auto"
 							/>
@@ -108,7 +139,7 @@ const pageCtx = createPublicPageContext({
 					{
 						!siteLogo && (
 							<img
-								src="/img/logos/oatmeal-instrument-color-white.svg"
+								src={logoWhite.src}
 								alt={siteTitle}
 								class="not-dark:hidden h-7 w-auto"
 							/>

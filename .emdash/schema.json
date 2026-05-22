@@ -1,28 +1,6 @@
 {
   "collections": [
     {
-      "slug": "dossers",
-      "label": "Dossers",
-      "labelSingular": "Dosser",
-      "supports": [
-        "drafts",
-        "revisions"
-      ],
-      "fields": [
-        {
-          "slug": "boss",
-          "label": "Boss",
-          "type": "reference",
-          "required": true,
-          "unique": false,
-          "widget": "reference",
-          "options": {
-            "collection": "dossers"
-          }
-        }
-      ]
-    },
-    {
       "slug": "faqs",
       "label": "FAQs",
       "labelSingular": "FAQ",
@@ -51,7 +29,7 @@
           "type": "reference",
           "required": true,
           "unique": false,
-          "widget": "reference",
+          "widget": "marketing-blocks:service-select",
           "options": {
             "collection": "services"
           }
@@ -79,6 +57,47 @@
           "slug": "content",
           "label": "Content",
           "type": "portableText",
+          "required": false,
+          "unique": false
+        }
+      ]
+    },
+    {
+      "slug": "posts",
+      "label": "Posts",
+      "labelSingular": "Post",
+      "supports": [
+        "drafts",
+        "revisions",
+        "search",
+        "seo"
+      ],
+      "fields": [
+        {
+          "slug": "title",
+          "label": "Title",
+          "type": "string",
+          "required": true,
+          "unique": false
+        },
+        {
+          "slug": "featured_image",
+          "label": "Featured Image",
+          "type": "image",
+          "required": false,
+          "unique": false
+        },
+        {
+          "slug": "content",
+          "label": "Content",
+          "type": "portableText",
+          "required": false,
+          "unique": false
+        },
+        {
+          "slug": "excerpt",
+          "label": "Excerpt",
+          "type": "text",
           "required": false,
           "unique": false
         }
@@ -178,10 +197,79 @@
           "type": "reference",
           "required": true,
           "unique": false,
-          "widget": "reference",
+          "widget": "marketing-blocks:service-select",
           "options": {
             "collection": "services"
           }
+        }
+      ]
+    },
+    {
+      "slug": "projects",
+      "label": "Projects",
+      "labelSingular": "Project",
+      "supports": [
+        "drafts",
+        "revisions",
+        "search",
+        "seo"
+      ],
+      "fields": [
+        {
+          "slug": "title",
+          "label": "Title",
+          "type": "string",
+          "required": true,
+          "unique": false
+        },
+        {
+          "slug": "featured_image",
+          "label": "Featured Image",
+          "type": "image",
+          "required": true,
+          "unique": false
+        },
+        {
+          "slug": "client",
+          "label": "Client",
+          "type": "string",
+          "required": false,
+          "unique": false
+        },
+        {
+          "slug": "year",
+          "label": "Year",
+          "type": "string",
+          "required": false,
+          "unique": false
+        },
+        {
+          "slug": "summary",
+          "label": "Summary",
+          "type": "text",
+          "required": false,
+          "unique": false
+        },
+        {
+          "slug": "content",
+          "label": "Content",
+          "type": "portableText",
+          "required": false,
+          "unique": false
+        },
+        {
+          "slug": "gallery",
+          "label": "Gallery",
+          "type": "json",
+          "required": false,
+          "unique": false
+        },
+        {
+          "slug": "url",
+          "label": "Project URL",
+          "type": "string",
+          "required": false,
+          "unique": false
         }
       ]
     },
@@ -246,7 +334,7 @@
           "type": "reference",
           "required": true,
           "unique": false,
-          "widget": "reference",
+          "widget": "marketing-blocks:service-select",
           "options": {
             "collection": "services"
           }
@@ -303,7 +391,7 @@
           "type": "reference",
           "required": true,
           "unique": false,
-          "widget": "reference",
+          "widget": "marketing-blocks:service-select",
           "options": {
             "collection": "services"
           }
@@ -311,5 +399,5 @@
       ]
     }
   ],
-  "version": "bc373b5f64c745b5"
+  "version": "f7c68c969e7d4c2d"
 }

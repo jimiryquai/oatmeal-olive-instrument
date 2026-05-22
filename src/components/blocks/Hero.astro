@@ -8,9 +8,17 @@ import ButtonLink from "@/components/elements/ButtonLink.astro";
 import PlainButtonLink from "@/components/elements/PlainButtonLink.astro";
 import SoftButtonLink from "@/components/elements/SoftButtonLink.astro";
 import ArrowNarrowRightIcon from "@/components/icons/arrow-narrow-right-icon.astro";
-import Screenshot from "@/components/elements/screenshot.astro";
 import ClientLogoGrid from "@/components/sections/ClientLogoGrid.astro";
 import { getEmDashEntry, getEmDashCollection } from "emdash";
+import { Image as AstroImage } from "astro:assets";
+import Screenshot from "@/components/elements/screenshot.astro";
+
+import screenshot1Left1670 from "@/assets/screenshots/1-left-1670-top-1408.webp";
+import screenshot1OliveLeft1670 from "@/assets/screenshots/1-color-olive-left-1670-top-1408.webp";
+import screenshot1Left2000 from "@/assets/screenshots/1-left-2000-top-1408.webp";
+import screenshot1OliveLeft2000 from "@/assets/screenshots/1-color-olive-left-2000-top-1408.webp";
+import screenshot1Full from "@/assets/screenshots/1.webp";
+import screenshot1OliveFull from "@/assets/screenshots/1-color-olive.webp";
 
 interface RawHeroPlan {
 	name: string;
@@ -243,29 +251,29 @@ const hasCta = (primaryCtaLabel && primaryCtaUrl) || (secondaryCtaLabel && secon
 			)}
 			<div slot="demo" class="contents">
 				<Screenshot class="rounded-md lg:hidden" wallpaper="green" placement="bottom-right">
-					<img
-						src="/img/screenshots/1-left-1670-top-1408.webp"
+					<AstroImage
+						src={screenshot1Left1670}
 						alt=""
 						width="1670"
 						height="1408"
 						class="bg-white/75 md:hidden dark:hidden w-full h-auto"
 					/>
-					<img
-						src="/img/screenshots/1-color-olive-left-1670-top-1408.webp"
+					<AstroImage
+						src={screenshot1OliveLeft1670}
 						alt=""
 						width="1670"
 						height="1408"
 						class="bg-black/75 not-dark:hidden md:hidden w-full h-auto"
 					/>
-					<img
-						src="/img/screenshots/1-left-2000-top-1408.webp"
+					<AstroImage
+						src={screenshot1Left2000}
 						alt=""
 						width="2000"
 						height="1408"
 						class="bg-white/75 max-md:hidden dark:hidden w-full h-auto"
 					/>
-					<img
-						src="/img/screenshots/1-color-olive-left-2000-top-1408.webp"
+					<AstroImage
+						src={screenshot1OliveLeft2000}
 						alt=""
 						width="2000"
 						height="1408"
@@ -273,16 +281,16 @@ const hasCta = (primaryCtaLabel && primaryCtaUrl) || (secondaryCtaLabel && secon
 					/>
 				</Screenshot>
 				<Screenshot class="rounded-lg max-lg:hidden" wallpaper="green" placement="bottom">
-					<img
-						src="/img/screenshots/1.webp"
+					<AstroImage
+						src={screenshot1Full}
 						alt=""
 						class="bg-white/75 dark:hidden w-full h-auto"
 						width="3440"
 						height="1990"
 					/>
-					<img
+					<AstroImage
 						class="bg-black/75 not-dark:hidden w-full h-auto"
-						src="/img/screenshots/1-color-olive.webp"
+						src={screenshot1OliveFull}
 						alt=""
 						width="3440"
 						height="1990"

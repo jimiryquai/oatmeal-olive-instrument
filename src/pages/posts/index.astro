@@ -1,0 +1,111 @@
+---
+import { getEmDashCollection, getTermsForEntries } from "emdash";
+import Base from "../../layouts/Base.astro";
+import { getReadingTime } from "../../utils/reading-time";
+
+const { entries: posts, cacheHint } = await getEmDashCollection("posts", {
+	orderBy: { published_at: "desc" },
+});
+
+if (Astro.cache?.enabled) Astro.cache.set(cacheHint);
+
+// Single batched query for tags across all posts
+const tagsByEntry = await getTermsForEntries(
+	"posts",
+	posts.map((p) => p.data.id),
+	"tag",
+);
+
+const postsWithTags = posts.map((post) => ({
+	post,
+	tags: tagsByEntry.get(post.data.id) ?? [],
+	bylines: post.data.bylines ?? [],
+}));
+
+const formatDate = (date: Date) =>
+	date.toLocaleDateString("en-US", {
+		year: "numeric",
+		month: "long",
+		day: "numeric",
+	});
+---
+
+<Base title="All Posts" description="Browse all blog posts from the Oatmeal team">
+	<div class="mx-auto w-full max-w-4xl px-6 py-16 sm:py-24">
+		<header class="mb-12 border-b border-olive-950/10 dark:border-white/10 pb-8">
+			<h1 class="text-4xl sm:text-5xl font-display tracking-tight text-olive-950 dark:text-white">
+				All Posts
+			</h1>
+			<p class="mt-2 text-base text-olive-600 dark:text-olive-400">
+				{posts.length} {posts.length === 1 ? "article" : "articles"} published
+			</p>
+		</header>
+
+		{
+			posts.length === 0 ? (
+				<p class="text-lg text-olive-650 dark:text-olive-455">No posts yet.</p>
+			) : (
+				<div class="flex flex-col divide-y divide-olive-950/10 dark:divide-white/10">
+					{postsWithTags.map(({ post, tags, bylines }) => (
+						<article class="py-10 first:pt-0 last:pb-0 group">
+							<a href={`/posts/${post.id}`} class="block no-underline text-inherit">
+								<div class="flex items-center flex-wrap gap-x-2 gap-y-1 text-sm text-olive-600 dark:text-olive-400 mb-3">
+									{bylines.length > 0 && (
+										<>
+											<div class="flex items-center gap-1 whitespace-nowrap">
+												{bylines.slice(0, 2).map((credit, index) => (
+													<span class="inline-flex items-center gap-1.5">
+														{index > 0 && <span class="text-olive-400 dark:text-olive-600">,</span>}
+														{credit.byline.avatarMediaId && (
+															<img
+																src={`/_emdash/api/media/file/${credit.byline.avatarMediaId}`}
+																alt={credit.byline.displayName}
+																class="w-5 h-5 rounded-full object-cover"
+															/>
+														)}
+														<span class="font-medium text-olive-700 dark:text-olive-300">
+															{credit.byline.displayName}
+														</span>
+													</span>
+												))}
+												{bylines.length > 2 && (
+													<span class="text-xs text-olive-500 ml-0.5">+{bylines.length - 2}</span>
+												)}
+											</div>
+											<span class="w-1 h-1 rounded-full bg-olive-300 dark:bg-olive-700" />
+										</>
+									)}
+									{post.data.publishedAt && (
+										<time>{formatDate(post.data.publishedAt)}</time>
+									)}
+									{post.data.publishedAt && <span class="w-1 h-1 rounded-full bg-olive-300 dark:bg-olive-700" />}
+									<span>{getReadingTime(post.data.content)} min read</span>
+								</div>
+								<h2 class="text-2xl font-semibold tracking-tight text-olive-950 dark:text-white mb-2 leading-snug group-hover:text-olive-750 dark:group-hover:text-olive-300 transition-colors duration-150">
+									{post.data.title}
+								</h2>
+								{post.data.excerpt && (
+									<p class="text-base sm:text-lg text-olive-700 dark:text-olive-400 leading-relaxed mb-4">
+										{post.data.excerpt}
+									</p>
+								)}
+							</a>
+							{tags.length > 0 && (
+								<div class="flex flex-wrap gap-1.5 mt-4">
+									{tags.slice(0, 3).map((t) => (
+										<a 
+											href={`/tag/${t.slug}`} 
+											class="inline-block px-2.5 py-0.5 text-xs text-olive-700 dark:text-olive-300 bg-olive-950/2.5 dark:bg-white/5 border border-olive-950/5 dark:border-white/5 rounded-full hover:text-olive-950 dark:hover:text-white hover:bg-olive-950/5 dark:hover:bg-white/10 transition-colors duration-150"
+										>
+											{t.label}
+										</a>
+									))}
+								</div>
+							)}
+						</article>
+					))}
+				</div>
+			)
+		}
+	</div>
+</Base>

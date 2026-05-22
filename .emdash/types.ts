@@ -3,17 +3,6 @@
 
 import type { PortableTextBlock } from "emdash";
 
-export interface Dosser {
-  id: string;
-  slug: string | null;
-  status: string;
-  boss: string;
-  createdAt: Date;
-  updatedAt: Date;
-  publishedAt: Date | null;
-  bylines?: ContentBylineCredit[];
-}
-
 export interface Faq {
   id: string;
   slug: string | null;
@@ -39,6 +28,20 @@ export interface Page {
   bylines?: ContentBylineCredit[];
 }
 
+export interface Post {
+  id: string;
+  slug: string | null;
+  status: string;
+  title: string;
+  featured_image?: { id: string; src?: string; alt?: string; width?: number; height?: number; provider?: string; previewUrl?: string; meta?: Record<string, unknown> };
+  content?: PortableTextBlock[];
+  excerpt?: string;
+  createdAt: Date;
+  updatedAt: Date;
+  publishedAt: Date | null;
+  bylines?: ContentBylineCredit[];
+}
+
 export interface PricingPlan {
   id: string;
   slug: string | null;
@@ -55,6 +58,24 @@ export interface PricingPlan {
   badge?: string;
   highlighted?: boolean;
   service: string;
+  createdAt: Date;
+  updatedAt: Date;
+  publishedAt: Date | null;
+  bylines?: ContentBylineCredit[];
+}
+
+export interface Project {
+  id: string;
+  slug: string | null;
+  status: string;
+  title: string;
+  featured_image: { id: string; src?: string; alt?: string; width?: number; height?: number; provider?: string; previewUrl?: string; meta?: Record<string, unknown> };
+  client?: string;
+  year?: string;
+  summary?: string;
+  content?: PortableTextBlock[];
+  gallery?: unknown;
+  url?: string;
   createdAt: Date;
   updatedAt: Date;
   publishedAt: Date | null;

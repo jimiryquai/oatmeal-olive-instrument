@@ -1,0 +1,115 @@
+---
+import type { MediaValue, ContentBylineCredit } from "emdash";
+import { Image } from "emdash/ui";
+
+interface Props {
+	title: string;
+	excerpt?: string;
+	featuredImage?: MediaValue | string;
+	href: string;
+	date?: Date;
+	readingTime?: number;
+	tags?: Array<{ slug: string; label: string }>;
+	bylines?: ContentBylineCredit[];
+}
+
+const {
+	title,
+	excerpt,
+	featuredImage,
+	href,
+	date,
+	readingTime,
+	tags,
+	bylines,
+} = Astro.props;
+
+const formattedDate = date
+	? date.toLocaleDateString("en-US", {
+			year: "numeric",
+			month: "short",
+			day: "numeric",
+		})
+	: null;
+---
+
+<article class="flex flex-col group">
+	<a href={href} class="block no-underline text-inherit">
+		{
+			featuredImage ? (
+				<div class="aspect-[16/10] overflow-hidden rounded-2xl bg-olive-950/2.5 dark:bg-white/5 mb-4 border border-olive-950/5 dark:border-white/5">
+					<Image 
+						image={featuredImage} 
+						class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-[1.03]" 
+					/>
+				</div>
+			) : (
+				<div class="aspect-[16/10] rounded-2xl bg-olive-950/2.5 dark:bg-white/5 mb-4 border border-olive-950/5 dark:border-white/5" />
+			)
+		}
+		<div class="flex-1">
+			<div class="flex items-center flex-wrap gap-x-2 gap-y-1 text-sm text-olive-600 dark:text-olive-400 mb-2">
+				{
+					bylines && bylines.length > 0 && (
+						<>
+							<div class="flex items-center gap-1 whitespace-nowrap">
+								{bylines.slice(0, 1).map((credit) => (
+									<span class="inline-flex items-center gap-1.5">
+										{credit.byline.avatarMediaId && (
+											<img
+												src={`/_emdash/api/media/file/${credit.byline.avatarMediaId}`}
+												alt={credit.byline.displayName}
+												class="w-5 h-5 rounded-full object-cover"
+											/>
+										)}
+										<span class="font-medium text-olive-700 dark:text-olive-300">
+											{credit.byline.displayName}
+										</span>
+									</span>
+								))}
+								{bylines.length > 1 && (
+									<span
+										class="relative text-xs text-olive-500 ml-0.5 cursor-default rounded px-1 bg-olive-950/5 dark:bg-white/10 hover:after:opacity-100 hover:after:visible focus-visible:after:opacity-100 focus-visible:after:visible after:content-[attr(data-tooltip)] after:absolute after:bottom-full after:left-1/2 after:-translate-x-1/2 after:mb-1.5 after:bg-olive-950 after:text-white after:dark:bg-white after:dark:text-olive-950 after:text-[10px] after:px-1.5 after:py-0.5 after:rounded after:opacity-0 after:invisible after:transition-all after:duration-150 after:whitespace-nowrap after:pointer-events-none after:z-10"
+										data-tooltip={bylines
+											.slice(1)
+											.map((c) => c.byline.displayName)
+											.join(", ")}
+										title={bylines
+											.slice(1)
+											.map((c) => c.byline.displayName)
+											.join(", ")}
+										tabindex="0"
+									>
+										+{bylines.length - 1}
+									</span>
+								)}
+							</div>
+							{(formattedDate || readingTime) && <span class="w-1 h-1 rounded-full bg-olive-300 dark:bg-olive-700" />}
+						</>
+					)
+				}
+				{formattedDate && <time class="whitespace-nowrap">{formattedDate}</time>}
+				{formattedDate && readingTime && <span class="w-1 h-1 rounded-full bg-olive-300 dark:bg-olive-700" />}
+				{readingTime && <span class="whitespace-nowrap">{readingTime} min read</span>}
+			</div>
+			<h2 class="text-xl font-semibold tracking-tight text-olive-950 dark:text-white mb-2 leading-snug group-hover:text-olive-700 dark:group-hover:text-olive-300 transition-colors duration-150">
+				{title}
+			</h2>
+			{excerpt && <p class="text-base text-olive-700 dark:text-olive-400 line-clamp-2 leading-relaxed">{excerpt}</p>}
+		</div>
+	</a>
+	{
+		tags && tags.length > 0 && (
+			<div class="flex flex-wrap gap-1.5 mt-3">
+				{tags.slice(0, 2).map((tag) => (
+					<a 
+						href={`/tag/${tag.slug}`} 
+						class="inline-block px-2.5 py-0.5 text-xs text-olive-700 dark:text-olive-300 bg-olive-950/2.5 dark:bg-white/5 border border-olive-950/5 dark:border-white/5 rounded-full hover:text-olive-950 dark:hover:text-white hover:bg-olive-950/5 dark:hover:bg-white/10 transition-colors duration-150"
+					>
+						{tag.label}
+					</a>
+				))}
+			</div>
+		)
+	}
+</article>

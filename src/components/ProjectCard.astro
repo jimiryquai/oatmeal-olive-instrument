@@ -1,0 +1,58 @@
+---
+import type { MediaValue } from "emdash";
+import { Image } from "emdash/ui";
+
+interface Props {
+	title: string;
+	summary?: string;
+	featuredImage: MediaValue | string;
+	href: string;
+	client?: string;
+	year?: string;
+	tags?: Array<{ slug: string; label: string }>;
+}
+
+const { title, summary, featuredImage, href, client, year, tags } = Astro.props;
+---
+
+<article class="flex flex-col group">
+	<a href={href} class="block no-underline text-inherit">
+		{
+			featuredImage ? (
+				<div class="aspect-[16/10] overflow-hidden rounded-2xl bg-olive-950/2.5 dark:bg-white/5 mb-4 border border-olive-950/5 dark:border-white/5">
+					<Image 
+						image={featuredImage} 
+						class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-[1.03]" 
+					/>
+				</div>
+			) : (
+				<div class="aspect-[16/10] rounded-2xl bg-olive-950/2.5 dark:bg-white/5 mb-4 border border-olive-950/5 dark:border-white/5" />
+			)
+		}
+		<div class="flex-1">
+			<div class="flex items-center flex-wrap gap-x-2 gap-y-1 text-sm text-olive-650 dark:text-olive-400 mb-2">
+				{client && <span class="font-medium text-olive-750 dark:text-olive-350">{client}</span>}
+				{client && year && <span class="w-1 h-1 rounded-full bg-olive-300 dark:bg-olive-700" />}
+				{year && <time class="whitespace-nowrap">{year}</time>}
+			</div>
+			<h2 class="text-2xl font-semibold tracking-tight text-olive-950 dark:text-white mb-2 leading-snug group-hover:text-olive-700 dark:group-hover:text-olive-300 transition-colors duration-150">
+				{title}
+			</h2>
+			{summary && <p class="text-base text-olive-700 dark:text-olive-400 line-clamp-2 leading-relaxed">{summary}</p>}
+		</div>
+	</a>
+	{
+		tags && tags.length > 0 && (
+			<div class="flex flex-wrap gap-1.5 mt-3">
+				{tags.slice(0, 3).map((tag) => (
+					<a 
+						href={`/work?tag=${tag.slug}`} 
+						class="inline-block px-2.5 py-0.5 text-xs text-olive-700 dark:text-olive-300 bg-olive-950/2.5 dark:bg-white/5 border border-olive-950/5 dark:border-white/5 rounded-full hover:text-olive-950 dark:hover:text-white hover:bg-olive-950/5 dark:hover:bg-white/10 transition-colors duration-150"
+					>
+						{tag.label}
+					</a>
+				))}
+			</div>
+		)
+	}
+</article>

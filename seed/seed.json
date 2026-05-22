@@ -15,7 +15,11 @@
 			"slug": "pages",
 			"label": "Pages",
 			"labelSingular": "Page",
-			"supports": ["drafts", "revisions", "seo"],
+			"supports": [
+				"drafts",
+				"revisions",
+				"seo"
+			],
 			"fields": [
 				{
 					"slug": "title",
@@ -34,7 +38,10 @@
 			"slug": "services",
 			"label": "Services",
 			"labelSingular": "Service",
-			"supports": ["drafts", "revisions"],
+			"supports": [
+				"drafts",
+				"revisions"
+			],
 			"fields": [
 				{
 					"slug": "title",
@@ -53,7 +60,10 @@
 			"slug": "testimonials",
 			"label": "Testimonials",
 			"labelSingular": "Testimonial",
-			"supports": ["drafts", "revisions"],
+			"supports": [
+				"drafts",
+				"revisions"
+			],
 			"fields": [
 				{
 					"slug": "quote",
@@ -87,7 +97,7 @@
 					"label": "Service",
 					"type": "reference",
 					"required": true,
-					"widget": "reference",
+					"widget": "marketing-blocks:service-select",
 					"options": {
 						"collection": "services"
 					}
@@ -98,7 +108,10 @@
 			"slug": "faqs",
 			"label": "FAQs",
 			"labelSingular": "FAQ",
-			"supports": ["drafts", "revisions"],
+			"supports": [
+				"drafts",
+				"revisions"
+			],
 			"fields": [
 				{
 					"slug": "question",
@@ -117,7 +130,7 @@
 					"label": "Service",
 					"type": "reference",
 					"required": true,
-					"widget": "reference",
+					"widget": "marketing-blocks:service-select",
 					"options": {
 						"collection": "services"
 					}
@@ -128,7 +141,10 @@
 			"slug": "pricing",
 			"label": "Pricing Plans",
 			"labelSingular": "Pricing Plan",
-			"supports": ["drafts", "revisions"],
+			"supports": [
+				"drafts",
+				"revisions"
+			],
 			"fields": [
 				{
 					"slug": "name",
@@ -194,7 +210,7 @@
 					"label": "Service",
 					"type": "reference",
 					"required": true,
-					"widget": "reference",
+					"widget": "marketing-blocks:service-select",
 					"options": {
 						"collection": "services"
 					}
@@ -205,7 +221,10 @@
 			"slug": "team",
 			"label": "Team Members",
 			"labelSingular": "Team Member",
-			"supports": ["drafts", "revisions"],
+			"supports": [
+				"drafts",
+				"revisions"
+			],
 			"fields": [
 				{
 					"slug": "name",
@@ -229,12 +248,158 @@
 					"label": "Service",
 					"type": "reference",
 					"required": true,
-					"widget": "reference",
+					"widget": "marketing-blocks:service-select",
 					"options": {
 						"collection": "services"
 					}
 				}
 			]
+		},
+		{
+			"slug": "posts",
+			"label": "Posts",
+			"labelSingular": "Post",
+			"supports": [
+				"drafts",
+				"revisions",
+				"search",
+				"seo"
+			],
+			"commentsEnabled": true,
+			"fields": [
+				{
+					"slug": "title",
+					"label": "Title",
+					"type": "string",
+					"required": true,
+					"searchable": true
+				},
+				{
+					"slug": "featured_image",
+					"label": "Featured Image",
+					"type": "image"
+				},
+				{
+					"slug": "content",
+					"label": "Content",
+					"type": "portableText",
+					"searchable": true
+				},
+				{
+					"slug": "excerpt",
+					"label": "Excerpt",
+					"type": "text"
+				}
+			]
+		},
+		{
+			"slug": "projects",
+			"label": "Projects",
+			"labelSingular": "Project",
+			"supports": [
+				"drafts",
+				"revisions",
+				"search",
+				"seo"
+			],
+			"fields": [
+				{
+					"slug": "title",
+					"label": "Title",
+					"type": "string",
+					"required": true,
+					"searchable": true
+				},
+				{
+					"slug": "featured_image",
+					"label": "Featured Image",
+					"type": "image",
+					"required": true
+				},
+				{
+					"slug": "client",
+					"label": "Client",
+					"type": "string"
+				},
+				{
+					"slug": "year",
+					"label": "Year",
+					"type": "string"
+				},
+				{
+					"slug": "summary",
+					"label": "Summary",
+					"type": "text",
+					"searchable": true
+				},
+				{
+					"slug": "content",
+					"label": "Content",
+					"type": "portableText",
+					"searchable": true
+				},
+				{
+					"slug": "gallery",
+					"label": "Gallery",
+					"type": "json"
+				},
+				{
+					"slug": "url",
+					"label": "Project URL",
+					"type": "string"
+				}
+			]
+		}
+	],
+	"taxonomies": [
+		{
+			"name": "category",
+			"label": "Categories",
+			"labelSingular": "Category",
+			"hierarchical": true,
+			"collections": ["posts", "projects"],
+			"terms": [
+				{ "slug": "general", "label": "General" },
+				{ "slug": "product", "label": "Product" },
+				{ "slug": "engineering", "label": "Engineering" },
+				{ "slug": "branding", "label": "Branding" },
+				{ "slug": "web", "label": "Web Design" },
+				{ "slug": "print", "label": "Print" },
+				{ "slug": "photography", "label": "Photography" }
+			]
+		},
+		{
+			"name": "tag",
+			"label": "Tags",
+			"labelSingular": "Tag",
+			"hierarchical": false,
+			"collections": ["posts", "projects"],
+			"terms": [
+				{ "slug": "announcement", "label": "Announcement" },
+				{ "slug": "tips", "label": "Tips" },
+				{ "slug": "support", "label": "Support" },
+				{ "slug": "identity", "label": "Identity" },
+				{ "slug": "ui-ux", "label": "UI/UX" },
+				{ "slug": "development", "label": "Development" },
+				{ "slug": "art-direction", "label": "Art Direction" },
+				{ "slug": "packaging", "label": "Packaging" },
+				{ "slug": "ecommerce", "label": "E-commerce" },
+				{ "slug": "editorial", "label": "Editorial" }
+			]
+		}
+	],
+	"bylines": [
+		{
+			"id": "byline-leslie",
+			"slug": "leslie-alexander",
+			"displayName": "Leslie Alexander",
+			"bio": "Co-Founder / CEO of Oatmeal."
+		},
+		{
+			"id": "byline-michael",
+			"slug": "michael-foster",
+			"displayName": "Michael Foster",
+			"bio": "Co-Founder / CTO of Oatmeal."
 		}
 	],
 	"menus": [
@@ -249,13 +414,18 @@
 				},
 				{
 					"type": "custom",
+					"label": "Work",
+					"url": "/work"
+				},
+				{
+					"type": "custom",
 					"label": "About",
 					"url": "/about"
 				},
 				{
 					"type": "custom",
-					"label": "Docs",
-					"url": "#"
+					"label": "Blog",
+					"url": "/blog"
 				}
 			]
 		},
@@ -263,38 +433,94 @@
 			"name": "footer_product",
 			"label": "Footer: Product",
 			"items": [
-				{ "type": "custom", "label": "Features", "url": "/#features" },
-				{ "type": "custom", "label": "Pricing", "url": "/pricing" },
-				{ "type": "custom", "label": "Integrations", "url": "#" }
+				{
+					"type": "custom",
+					"label": "Features",
+					"url": "/#features"
+				},
+				{
+					"type": "custom",
+					"label": "Pricing",
+					"url": "/pricing"
+				},
+				{
+					"type": "custom",
+					"label": "Integrations",
+					"url": "#"
+				}
 			]
 		},
 		{
 			"name": "footer_company",
 			"label": "Footer: Company",
 			"items": [
-				{ "type": "custom", "label": "About", "url": "/about" },
-				{ "type": "custom", "label": "Careers", "url": "#" },
-				{ "type": "custom", "label": "Blog", "url": "#" },
-				{ "type": "custom", "label": "Press Kit", "url": "#" }
+				{
+					"type": "custom",
+					"label": "About",
+					"url": "/about"
+				},
+				{
+					"type": "custom",
+					"label": "Careers",
+					"url": "#"
+				},
+				{
+					"type": "custom",
+					"label": "Blog",
+					"url": "/blog"
+				},
+				{
+					"type": "custom",
+					"label": "Press Kit",
+					"url": "#"
+				}
 			]
 		},
 		{
 			"name": "footer_resources",
 			"label": "Footer: Resources",
 			"items": [
-				{ "type": "custom", "label": "Help Center", "url": "#" },
-				{ "type": "custom", "label": "API Docs", "url": "#" },
-				{ "type": "custom", "label": "Status", "url": "#" },
-				{ "type": "custom", "label": "Contact", "url": "#" }
+				{
+					"type": "custom",
+					"label": "Help Center",
+					"url": "#"
+				},
+				{
+					"type": "custom",
+					"label": "API Docs",
+					"url": "#"
+				},
+				{
+					"type": "custom",
+					"label": "Status",
+					"url": "#"
+				},
+				{
+					"type": "custom",
+					"label": "Contact",
+					"url": "#"
+				}
 			]
 		},
 		{
 			"name": "footer_legal",
 			"label": "Footer: Legal",
 			"items": [
-				{ "type": "custom", "label": "Privacy Policy", "url": "/privacy-policy" },
-				{ "type": "custom", "label": "Terms of Service", "url": "#" },
-				{ "type": "custom", "label": "Security", "url": "#" }
+				{
+					"type": "custom",
+					"label": "Privacy Policy",
+					"url": "/privacy-policy"
+				},
+				{
+					"type": "custom",
+					"label": "Terms of Service",
+					"url": "#"
+				},
+				{
+					"type": "custom",
+					"label": "Security",
+					"url": "#"
+				}
 			]
 		}
 	],
@@ -633,28 +859,139 @@
 							"_type": "marketing.comparison",
 							"_key": "pricing-comparison",
 							"items": [
-								{ "groupName": "Collaboration", "name": "Shared inboxes", "starterValue": "2", "growthValue": "Unlimited", "proValue": "Unlimited" },
-								{ "groupName": "Collaboration", "name": "Private notes", "starterValue": "true", "growthValue": "true", "proValue": "true" },
-								{ "groupName": "Collaboration", "name": "Tagging & assignment", "starterValue": "true", "growthValue": "true", "proValue": "true" },
-								{ "groupName": "Collaboration", "name": "Collision detection", "starterValue": "false", "growthValue": "true", "proValue": "true" },
-								{ "groupName": "Collaboration", "name": "Real-time activity indicators", "starterValue": "false", "growthValue": "true", "proValue": "true" },
-								{ "groupName": "Collaboration", "name": "Internal chat", "starterValue": "false", "growthValue": "true", "proValue": "true" },
-								
-								{ "groupName": "Automation", "name": "Automatic replies", "starterValue": "true", "growthValue": "true", "proValue": "true" },
-								{ "groupName": "Automation", "name": "Inbox Agent", "starterValue": "false", "growthValue": "true", "proValue": "true" },
-								{ "groupName": "Automation", "name": "Automation engine", "starterValue": "false", "growthValue": "true", "proValue": "true" },
-								{ "groupName": "Automation", "name": "Snippets and templates", "starterValue": "false", "growthValue": "true", "proValue": "true" },
-								{ "groupName": "Automation", "name": "SLA tracking", "starterValue": "false", "growthValue": "false", "proValue": "true" },
-								
-								{ "groupName": "Team Management", "name": "Unlimited users", "starterValue": "Up to 5", "growthValue": "true", "proValue": "true" },
-								{ "groupName": "Team Management", "name": "Reporting dashboard", "starterValue": "false", "growthValue": "true", "proValue": "true" },
-								{ "groupName": "Team Management", "name": "Slack integration", "starterValue": "false", "growthValue": "true", "proValue": "true" },
-								{ "groupName": "Team Management", "name": "Roles & permissions", "starterValue": "false", "growthValue": "false", "proValue": "true" },
-								{ "groupName": "Team Management", "name": "SSO support", "starterValue": "false", "growthValue": "false", "proValue": "true" },
-								
-								{ "groupName": "Support", "name": "Email support", "starterValue": "true", "growthValue": "true", "proValue": "true" },
-								{ "groupName": "Support", "name": "Priority response", "starterValue": "false", "growthValue": "true", "proValue": "true" },
-								{ "groupName": "Support", "name": "Dedicated manager", "starterValue": "false", "growthValue": "false", "proValue": "true" }
+								{
+									"groupName": "Collaboration",
+									"name": "Shared inboxes",
+									"starterValue": "2",
+									"growthValue": "Unlimited",
+									"proValue": "Unlimited"
+								},
+								{
+									"groupName": "Collaboration",
+									"name": "Private notes",
+									"starterValue": "true",
+									"growthValue": "true",
+									"proValue": "true"
+								},
+								{
+									"groupName": "Collaboration",
+									"name": "Tagging & assignment",
+									"starterValue": "true",
+									"growthValue": "true",
+									"proValue": "true"
+								},
+								{
+									"groupName": "Collaboration",
+									"name": "Collision detection",
+									"starterValue": "false",
+									"growthValue": "true",
+									"proValue": "true"
+								},
+								{
+									"groupName": "Collaboration",
+									"name": "Real-time activity indicators",
+									"starterValue": "false",
+									"growthValue": "true",
+									"proValue": "true"
+								},
+								{
+									"groupName": "Collaboration",
+									"name": "Internal chat",
+									"starterValue": "false",
+									"growthValue": "true",
+									"proValue": "true"
+								},
+								{
+									"groupName": "Automation",
+									"name": "Automatic replies",
+									"starterValue": "true",
+									"growthValue": "true",
+									"proValue": "true"
+								},
+								{
+									"groupName": "Automation",
+									"name": "Inbox Agent",
+									"starterValue": "false",
+									"growthValue": "true",
+									"proValue": "true"
+								},
+								{
+									"groupName": "Automation",
+									"name": "Automation engine",
+									"starterValue": "false",
+									"growthValue": "true",
+									"proValue": "true"
+								},
+								{
+									"groupName": "Automation",
+									"name": "Snippets and templates",
+									"starterValue": "false",
+									"growthValue": "true",
+									"proValue": "true"
+								},
+								{
+									"groupName": "Automation",
+									"name": "SLA tracking",
+									"starterValue": "false",
+									"growthValue": "false",
+									"proValue": "true"
+								},
+								{
+									"groupName": "Team Management",
+									"name": "Unlimited users",
+									"starterValue": "Up to 5",
+									"growthValue": "true",
+									"proValue": "true"
+								},
+								{
+									"groupName": "Team Management",
+									"name": "Reporting dashboard",
+									"starterValue": "false",
+									"growthValue": "true",
+									"proValue": "true"
+								},
+								{
+									"groupName": "Team Management",
+									"name": "Slack integration",
+									"starterValue": "false",
+									"growthValue": "true",
+									"proValue": "true"
+								},
+								{
+									"groupName": "Team Management",
+									"name": "Roles & permissions",
+									"starterValue": "false",
+									"growthValue": "false",
+									"proValue": "true"
+								},
+								{
+									"groupName": "Team Management",
+									"name": "SSO support",
+									"starterValue": "false",
+									"growthValue": "false",
+									"proValue": "true"
+								},
+								{
+									"groupName": "Support",
+									"name": "Email support",
+									"starterValue": "true",
+									"growthValue": "true",
+									"proValue": "true"
+								},
+								{
+									"groupName": "Support",
+									"name": "Priority response",
+									"starterValue": "false",
+									"growthValue": "true",
+									"proValue": "true"
+								},
+								{
+									"groupName": "Support",
+									"name": "Dedicated manager",
+									"starterValue": "false",
+									"growthValue": "false",
+									"proValue": "true"
+								}
 							]
 						},
 						{
@@ -1087,6 +1424,314 @@
 						}
 					},
 					"service": "$ref:shared-inbox"
+				}
+			}
+		],
+		"posts": [
+			{
+				"id": "introducing-oatmeal",
+				"slug": "introducing-oatmeal",
+				"status": "published",
+				"data": {
+					"title": "Introducing Oatmeal",
+					"excerpt": "A first look at customer support that feels like a conversation.",
+					"featured_image": {
+						"$media": {
+							"url": "https://images.unsplash.com/photo-1557200134-90327ee9fafa?w=1200&h=800&fit=crop",
+							"alt": "A cup of warm oatmeal next to a laptop",
+							"filename": "introducing-oatmeal.jpg"
+						}
+					},
+					"content": [
+						{
+							"_type": "block",
+							"style": "normal",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Today we are excited to officially introduce Oatmeal, a brand new customer support platform designed for modern teams. We believe that support shouldn't feel like a clinical ticket queue; it should feel like a warm, natural conversation."
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "h2",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Why Oatmeal?"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Traditional help desks treat your customers like numbers. They assign impersonal ticket IDs, send robotic auto-replies, and make it hard to maintain a human connection. Oatmeal fixes this by putting simplicity and warmth front and center."
+								}
+							]
+						}
+					]
+				},
+				"bylines": [
+					{ "byline": "byline-leslie" }
+				],
+				"taxonomies": {
+					"category": ["general"],
+					"tag": ["announcement"]
+				}
+			},
+			{
+				"id": "building-better-shared-inbox",
+				"slug": "building-better-shared-inbox",
+				"status": "published",
+				"data": {
+					"title": "Building a Better Shared Inbox",
+					"excerpt": "How we designed a collaborative workspace that keeps teams aligned without the clutter.",
+					"featured_image": {
+						"$media": {
+							"url": "https://images.unsplash.com/photo-1531403009284-440f080d1e12?w=1200&h=800&fit=crop",
+							"alt": "Team collaborating in front of a whiteboard",
+							"filename": "better-shared-inbox.jpg"
+						}
+					},
+					"content": [
+						{
+							"_type": "block",
+							"style": "normal",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Shared inboxes are notorious for becoming cluttered and chaotic. When multiple people have access to the same email list, messages get missed, replies overlap, and context gets lost. Here is how we tackled these design challenges in Oatmeal."
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "h2",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Collision Detection is Key"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"children": [
+								{
+									"_type": "span",
+									"text": "One of the most common issues in collaborative support is 'double replying' — two agents drafting replies to the same customer at the same time. By implementing real-time presence indicators, we ensure that you always know when a teammate is viewing or drafting a reply to a conversation."
+								}
+							]
+						}
+					]
+				},
+				"bylines": [
+					{ "byline": "byline-michael" }
+				],
+				"taxonomies": {
+					"category": ["engineering", "product"],
+					"tag": ["tips", "support"]
+				}
+			}
+		],
+		"projects": [
+			{
+				"id": "acme-identity",
+				"slug": "acme-identity",
+				"status": "published",
+				"data": {
+					"title": "Acme Brand Identity",
+					"client": "Acme Corporation",
+					"year": "2025",
+					"url": "https://acme.example.com",
+					"summary": "A complete rebranding and visual identity system for Acme Corporation, aligning their digital and physical presence.",
+					"featured_image": {
+						"$media": {
+							"url": "https://images.unsplash.com/photo-1513542789411-b6a5d4f31634?w=1200&h=800&fit=crop",
+							"alt": "Acme logo and brand guidelines on a table",
+							"filename": "acme-identity.jpg"
+						}
+					},
+					"content": [
+						{
+							"_type": "block",
+							"style": "normal",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Acme Corporation is a leading provider of various widgets and services. They approached us with a challenge: their existing brand identity was fragmented across different products, leading to brand confusion."
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "h2",
+							"children": [
+								{
+									"_type": "span",
+									"text": "The Solution"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"children": [
+								{
+									"_type": "span",
+									"text": "We designed a unified design system and visual guidelines, starting with a modernized logo mark, refreshed color palette, and bespoke typography. We then expanded this system into website mockups, print materials, and physical packaging designs."
+								}
+							]
+						}
+					],
+					"gallery": [
+						{
+							"url": "https://images.unsplash.com/photo-1626785774573-4b799315345d?w=800&h=600&fit=crop",
+							"alt": "Modern brand identity design showcase"
+						},
+						{
+							"url": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&h=600&fit=crop",
+							"alt": "Abstract color theme patterns"
+						}
+					]
+				},
+				"taxonomies": {
+					"category": ["branding"],
+					"tag": ["identity", "art-direction"]
+				}
+			},
+			{
+				"id": "globex-ecommerce",
+				"slug": "globex-ecommerce",
+				"status": "published",
+				"data": {
+					"title": "Globex E-Commerce Platform",
+					"client": "Globex Industries",
+					"year": "2026",
+					"url": "https://globex.example.com",
+					"summary": "Designing and building a highly scalable, secure, and modern e-commerce storefront for Globex Industries.",
+					"featured_image": {
+						"$media": {
+							"url": "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?w=1200&h=800&fit=crop",
+							"alt": "Globex storefront shown on a MacBook",
+							"filename": "globex-ecommerce.jpg"
+						}
+					},
+					"content": [
+						{
+							"_type": "block",
+							"style": "normal",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Globex Industries needed a new e-commerce storefront to power their expanding global retail operations. The legacy platform was slow, difficult to modify, and lacked modern checkout patterns."
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "h2",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Development & UI/UX"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"children": [
+								{
+									"_type": "span",
+									"text": "We designed a fully responsive UI/UX system that focuses on conversion, user feedback, and fast load times. Built using modern APIs, the new platform improved check-out speed and reduced cart abandonment significantly."
+								}
+							]
+						}
+					],
+					"gallery": [
+						{
+							"url": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=600&fit=crop",
+							"alt": "E-commerce dashboard metrics analytics"
+						},
+						{
+							"url": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=600&fit=crop",
+							"alt": "Interactive charts showing retail performance"
+						}
+					]
+				},
+				"taxonomies": {
+					"category": ["web"],
+					"tag": ["ui-ux", "development", "ecommerce"]
+				}
+			},
+			{
+				"id": "stellar-app",
+				"slug": "stellar-app",
+				"status": "published",
+				"data": {
+					"title": "Stellar Mobile Application",
+					"client": "Stellar Systems",
+					"year": "2026",
+					"summary": "A sleek mobile companion application for Stellar Systems, simplifying account management and notifications.",
+					"featured_image": {
+						"$media": {
+							"url": "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=1200&h=800&fit=crop",
+							"alt": "Stellar application mockup on an iPhone",
+							"filename": "stellar-app.jpg"
+						}
+					},
+					"content": [
+						{
+							"_type": "block",
+							"style": "normal",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Stellar Systems wanted to provide a mobile app for their thousands of users, giving them access to real-time telemetry, push notifications, and remote control options."
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "h2",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Design & UI/UX"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"children": [
+								{
+									"_type": "span",
+									"text": "We crafted a cohesive user experience optimized for mobile screens. We focused on micro-animations, accessible touch targets, and offline capabilities to make the app feel quick and reliable."
+								}
+							]
+						}
+					],
+					"gallery": [
+						{
+							"url": "https://images.unsplash.com/photo-1522542550221-31fd19575a2d?w=800&h=600&fit=crop",
+							"alt": "Mobile design wireframes and layouts"
+						},
+						{
+							"url": "https://images.unsplash.com/photo-1551650975-87deedd944c3?w=800&h=600&fit=crop",
+							"alt": "App interface screen flows mockup"
+						}
+					]
+				},
+				"taxonomies": {
+					"category": ["web"],
+					"tag": ["ui-ux", "development"]
 				}
 			}
 		]
