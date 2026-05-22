@@ -1,0 +1,47 @@
+---
+import { clsx } from 'clsx/lite'
+
+interface Props {
+  headline?: any
+  subheadline?: any
+  cta?: any
+  demo?: any
+  class?: string
+  [key: string]: any
+}
+
+const {
+  headline,
+  subheadline,
+  cta,
+  demo,
+  class: className,
+  ...props
+} = Astro.props
+---
+<div
+  class={clsx(
+    'group grid grid-flow-dense grid-cols-1 gap-2 rounded-lg bg-olive-950/2.5 p-2 lg:grid-cols-2 dark:bg-white/5',
+    className,
+  )}
+  {...props}
+>
+  <div class="flex flex-col justify-between gap-6 p-6 sm:gap-10 sm:p-10 lg:p-6 lg:group-even:col-start-2">
+    <div class="text-xl/8 sm:text-2xl/9">
+      <h3 class="text-olive-950 dark:text-white">
+        {headline}
+        <slot name="headline" />
+      </h3>
+      <div class="flex flex-col gap-4 text-olive-500">
+        {subheadline}
+        <slot name="subheadline" />
+      </div>
+    </div>
+    {cta}
+    <slot name="cta" />
+  </div>
+  <div class="relative overflow-hidden rounded-sm lg:group-even:col-start-1 dark:after:absolute dark:after:inset-0 dark:after:rounded-sm dark:after:outline-1 dark:after:-outline-offset-1 dark:after:outline-white/10">
+    {demo}
+    <slot name="demo" />
+  </div>
+</div>

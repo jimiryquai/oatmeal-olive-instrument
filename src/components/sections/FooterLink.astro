@@ -1,0 +1,14 @@
+---
+import { clsx } from 'clsx/lite'
+
+interface Props {
+  href: string
+  class?: string
+  [key: string]: any
+}
+
+const { href, class: className, ...props } = Astro.props
+---
+<li class={clsx('text-olive-700 dark:text-olive-400', className)}>
+  <a href={href} {...props}><slot /></a>
+</li>

@@ -1,0 +1,34 @@
+---
+import { clsx } from 'clsx/lite'
+import PlusIcon from '../icons/plus-icon.astro'
+import MinusIcon from '../icons/minus-icon.astro'
+
+interface Props {
+  id?: string
+  question?: string
+  answer?: string
+  class?: string
+  [key: string]: any
+}
+
+const { id, question, answer, class: className, ...props } = Astro.props
+---
+<details class={clsx("group", className)} id={id} {...props}>
+  <summary class="flex w-full cursor-pointer list-none items-start justify-between gap-6 py-4 text-left text-base/7 text-olive-950 dark:text-white [&::-webkit-details-marker]:hidden">
+    <span>{question}</span>
+    <PlusIcon class="plus-icon h-lh" />
+    <MinusIcon class="minus-icon h-lh" />
+  </summary>
+  <div class="-mt-2 flex flex-col gap-2 pr-12 pb-4 text-sm/7 text-olive-700 dark:text-olive-400">
+    {answer}
+  </div>
+</details>
+
+<style>
+  details:not([open]) .minus-icon {
+    display: none !important;
+  }
+  details[open] .plus-icon {
+    display: none !important;
+  }
+</style>

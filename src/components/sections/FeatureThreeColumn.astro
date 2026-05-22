@@ -1,0 +1,38 @@
+---
+import { clsx } from 'clsx/lite'
+
+interface Props {
+  icon?: any
+  headline?: any
+  subheadline?: any
+  class?: string
+  [key: string]: any
+}
+
+const {
+  icon,
+  headline,
+  subheadline,
+  class: className,
+  ...props
+} = Astro.props
+---
+<div class={clsx('flex flex-col gap-2 text-sm/7', className)} {...props}>
+  <div class="flex items-start gap-3 text-olive-950 dark:text-white">
+    {(icon || Astro.slots.has('icon')) && (
+      <div class="flex size-3.25 h-lh items-center">
+        {icon}
+        <slot name="icon" />
+      </div>
+    )}
+    <h3 class="font-semibold">
+      {headline}
+      <slot name="headline" />
+    </h3>
+  </div>
+  <div class="flex flex-col gap-4 text-olive-700 dark:text-olive-400">
+    {subheadline}
+    <slot name="subheadline" />
+    <slot />
+  </div>
+</div>

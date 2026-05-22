@@ -1,0 +1,25 @@
+---
+import { clsx } from 'clsx/lite'
+
+interface Props {
+  name?: string
+  byline?: string
+  class?: string
+  [key: string]: any
+}
+
+const { name, byline, class: className, ...props } = Astro.props
+---
+<li class={clsx('flex flex-col gap-4 text-sm/7', className)} {...props}>
+  <div class="aspect-3/4 w-full overflow-hidden rounded-sm outline -outline-offset-1 outline-black/5 *:size-full *:object-cover dark:outline-white/5">
+    <slot name="img" />
+  </div>
+  <div>
+    <p class="font-semibold text-olive-950 dark:text-white">
+      {name || <slot name="name" />}
+    </p>
+    <p class="text-olive-700 dark:text-olive-400">
+      {byline || <slot name="byline" />}
+    </p>
+  </div>
+</li>

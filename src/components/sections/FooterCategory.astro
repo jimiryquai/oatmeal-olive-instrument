@@ -1,0 +1,14 @@
+---
+interface Props {
+  title: string
+  [key: string]: any
+}
+
+const { title, ...props } = Astro.props
+---
+<div {...props}>
+  <h3>{title}</h3>
+  <ul role="list" class="mt-2 flex flex-col gap-2">
+    <slot />
+  </ul>
+</div>

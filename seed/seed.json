@@ -1,0 +1,1094 @@
+{
+	"$schema": "https://emdashcms.com/seed.schema.json",
+	"version": "1",
+	"meta": {
+		"name": "Oatmeal Marketing Site",
+		"description": "Replicated Oatmeal marketing site with pages powered by EmDash CMS",
+		"author": "Antigravity"
+	},
+	"settings": {
+		"title": "Oatmeal",
+		"tagline": "Customer support that feels like a conversation."
+	},
+	"collections": [
+		{
+			"slug": "pages",
+			"label": "Pages",
+			"labelSingular": "Page",
+			"supports": ["drafts", "revisions", "seo"],
+			"fields": [
+				{
+					"slug": "title",
+					"label": "Title",
+					"type": "string",
+					"required": true
+				},
+				{
+					"slug": "content",
+					"label": "Content",
+					"type": "portableText"
+				}
+			]
+		},
+		{
+			"slug": "services",
+			"label": "Services",
+			"labelSingular": "Service",
+			"supports": ["drafts", "revisions"],
+			"fields": [
+				{
+					"slug": "title",
+					"label": "Title",
+					"type": "string",
+					"required": true
+				},
+				{
+					"slug": "description",
+					"label": "Description",
+					"type": "text"
+				}
+			]
+		},
+		{
+			"slug": "testimonials",
+			"label": "Testimonials",
+			"labelSingular": "Testimonial",
+			"supports": ["drafts", "revisions"],
+			"fields": [
+				{
+					"slug": "quote",
+					"label": "Quote",
+					"type": "text",
+					"required": true
+				},
+				{
+					"slug": "author",
+					"label": "Author",
+					"type": "string",
+					"required": true
+				},
+				{
+					"slug": "role",
+					"label": "Role",
+					"type": "string"
+				},
+				{
+					"slug": "company",
+					"label": "Company",
+					"type": "string"
+				},
+				{
+					"slug": "avatar",
+					"label": "Avatar",
+					"type": "image"
+				},
+				{
+					"slug": "service",
+					"label": "Service",
+					"type": "reference",
+					"required": true,
+					"widget": "reference",
+					"options": {
+						"collection": "services"
+					}
+				}
+			]
+		},
+		{
+			"slug": "faqs",
+			"label": "FAQs",
+			"labelSingular": "FAQ",
+			"supports": ["drafts", "revisions"],
+			"fields": [
+				{
+					"slug": "question",
+					"label": "Question",
+					"type": "string",
+					"required": true
+				},
+				{
+					"slug": "answer",
+					"label": "Answer",
+					"type": "text",
+					"required": true
+				},
+				{
+					"slug": "service",
+					"label": "Service",
+					"type": "reference",
+					"required": true,
+					"widget": "reference",
+					"options": {
+						"collection": "services"
+					}
+				}
+			]
+		},
+		{
+			"slug": "pricing",
+			"label": "Pricing Plans",
+			"labelSingular": "Pricing Plan",
+			"supports": ["drafts", "revisions"],
+			"fields": [
+				{
+					"slug": "name",
+					"label": "Name",
+					"type": "string",
+					"required": true
+				},
+				{
+					"slug": "price",
+					"label": "Price",
+					"type": "string",
+					"required": true
+				},
+				{
+					"slug": "price_monthly",
+					"label": "Price (Monthly)",
+					"type": "string"
+				},
+				{
+					"slug": "price_yearly",
+					"label": "Price (Yearly)",
+					"type": "string"
+				},
+				{
+					"slug": "period",
+					"label": "Period",
+					"type": "string",
+					"defaultValue": "/mo"
+				},
+				{
+					"slug": "description",
+					"label": "Description",
+					"type": "text"
+				},
+				{
+					"slug": "features",
+					"label": "Features (one per line)",
+					"type": "text"
+				},
+				{
+					"slug": "cta_label",
+					"label": "CTA Label",
+					"type": "string"
+				},
+				{
+					"slug": "cta_url",
+					"label": "CTA URL",
+					"type": "string"
+				},
+				{
+					"slug": "badge",
+					"label": "Badge",
+					"type": "string"
+				},
+				{
+					"slug": "highlighted",
+					"label": "Highlighted",
+					"type": "boolean",
+					"defaultValue": false
+				},
+				{
+					"slug": "service",
+					"label": "Service",
+					"type": "reference",
+					"required": true,
+					"widget": "reference",
+					"options": {
+						"collection": "services"
+					}
+				}
+			]
+		},
+		{
+			"slug": "team",
+			"label": "Team Members",
+			"labelSingular": "Team Member",
+			"supports": ["drafts", "revisions"],
+			"fields": [
+				{
+					"slug": "name",
+					"label": "Name",
+					"type": "string",
+					"required": true
+				},
+				{
+					"slug": "role",
+					"label": "Role",
+					"type": "string",
+					"required": true
+				},
+				{
+					"slug": "image",
+					"label": "Photo",
+					"type": "image"
+				},
+				{
+					"slug": "service",
+					"label": "Service",
+					"type": "reference",
+					"required": true,
+					"widget": "reference",
+					"options": {
+						"collection": "services"
+					}
+				}
+			]
+		}
+	],
+	"menus": [
+		{
+			"name": "primary",
+			"label": "Primary Navigation",
+			"items": [
+				{
+					"type": "custom",
+					"label": "Pricing",
+					"url": "/pricing"
+				},
+				{
+					"type": "custom",
+					"label": "About",
+					"url": "/about"
+				},
+				{
+					"type": "custom",
+					"label": "Docs",
+					"url": "#"
+				}
+			]
+		},
+		{
+			"name": "footer_product",
+			"label": "Footer: Product",
+			"items": [
+				{ "type": "custom", "label": "Features", "url": "/#features" },
+				{ "type": "custom", "label": "Pricing", "url": "/pricing" },
+				{ "type": "custom", "label": "Integrations", "url": "#" }
+			]
+		},
+		{
+			"name": "footer_company",
+			"label": "Footer: Company",
+			"items": [
+				{ "type": "custom", "label": "About", "url": "/about" },
+				{ "type": "custom", "label": "Careers", "url": "#" },
+				{ "type": "custom", "label": "Blog", "url": "#" },
+				{ "type": "custom", "label": "Press Kit", "url": "#" }
+			]
+		},
+		{
+			"name": "footer_resources",
+			"label": "Footer: Resources",
+			"items": [
+				{ "type": "custom", "label": "Help Center", "url": "#" },
+				{ "type": "custom", "label": "API Docs", "url": "#" },
+				{ "type": "custom", "label": "Status", "url": "#" },
+				{ "type": "custom", "label": "Contact", "url": "#" }
+			]
+		},
+		{
+			"name": "footer_legal",
+			"label": "Footer: Legal",
+			"items": [
+				{ "type": "custom", "label": "Privacy Policy", "url": "/privacy-policy" },
+				{ "type": "custom", "label": "Terms of Service", "url": "#" },
+				{ "type": "custom", "label": "Security", "url": "#" }
+			]
+		}
+	],
+	"content": {
+		"pages": [
+			{
+				"id": "home",
+				"slug": "home",
+				"status": "published",
+				"data": {
+					"title": "Home",
+					"content": [
+						{
+							"_type": "marketing.hero",
+							"_key": "hero",
+							"variation": "left-aligned-with-demo",
+							"eyebrowText": "Oatmeal raises 80M Series A funding",
+							"eyebrowUrl": "#",
+							"eyebrowCta": "Learn more",
+							"headline": "Customer support that feels like a conversation.",
+							"subheadline": "Simplify your shared inbox, collaborate effortlessly, and give every customer a reply that feels personal — even if it was generated by a bot.",
+							"primaryCtaLabel": "Start free trial",
+							"primaryCtaUrl": "#",
+							"secondaryCtaLabel": "See how it works",
+							"secondaryCtaUrl": "#"
+						},
+						{
+							"_type": "marketing.features",
+							"_key": "features",
+							"headline": "Everything you need to deliver personal, organized, and delightful support.",
+							"subheadline": "Work smarter, reply faster, and keep every customer conversation right where it belongs — in one simple inbox.",
+							"features": [
+								{
+									"title": "Shared Inbox",
+									"description": "Keep every customer conversation in one clean, collaborative inbox. A single source of truth is much easier to ignore."
+								},
+								{
+									"title": "Inbox Agent",
+									"description": "Get valuable context without having to read through your customer's long, angry email thread."
+								}
+							]
+						},
+						{
+							"_type": "marketing.stats",
+							"_key": "stats",
+							"eyebrow": "Built for scale",
+							"headline": "The inbox powering customer conversations everywhere.",
+							"subheadline": "Oatmeal helps teams deliver personal, organized, and fast customer support across the world. From small startups to enterprise teams, we process millions of messages each month — using a massive network of low wage workers stationed around the globe.",
+							"stats": [
+								{
+									"stat": "2M+",
+									"text": "Emails manually processed every week across thousands of teams."
+								},
+								{
+									"stat": "99.98%",
+									"text": "Uptime — because your customers never stop complaining."
+								}
+							]
+						},
+						{
+							"_type": "marketing.testimonials",
+							"_key": "testimonials",
+							"headline": "What our customers are saying",
+							"testimonials": [
+								{
+									"quote": "Oatmeal has completely transformed our customer support operations. To be fair, we weren't doing any customer support at all so the bar was pretty low.",
+									"author": "Jordan Rogers",
+									"role": "Founder",
+									"company": "Anomaly",
+									"avatar": "/img/avatars/10-size-160.webp"
+								},
+								{
+									"quote": "We use Oatmeal's automation features to make cancellation requests disappear into a black hole, improving our retention rates by over 300%.",
+									"author": "Lynn Marshall",
+									"role": "Founder",
+									"company": "Pine Labs",
+									"avatar": "/img/avatars/15-size-160.webp"
+								},
+								{
+									"quote": "I've been using the spare time that Oatmeal has freed up to work not just one, but two other jobs, all while hitting my core KPIs. My bosses have no idea.",
+									"author": "Rajat Singh",
+									"role": "Head of Support",
+									"company": "Concise",
+									"avatar": "/img/avatars/13-size-160.webp"
+								},
+								{
+									"quote": "Oatmeal has given us key insights into how much our customers absolutely hate using our product and how we can improve it to stop them from leaving us.",
+									"author": "John Walters",
+									"role": "CPO",
+									"company": "Orbital",
+									"avatar": "/img/avatars/12-size-160.webp"
+								},
+								{
+									"quote": "As a solo founder, Oatmeal has been a lifesaver. It makes it look like Looply is an actual company with multiple employees, when in reality it's just me and an AI.",
+									"author": "Noah Gold",
+									"role": "CEO",
+									"company": "Looply",
+									"avatar": "/img/avatars/11-size-160.webp"
+								},
+								{
+									"quote": "Thanks to Oatmeal, we've managed to cut our support costs in half by laying off dozens of employees, while still improving response times and customer satisfaction.",
+									"author": "Mark Levinson",
+									"role": "COO",
+									"company": "Quirk",
+									"avatar": "/img/avatars/14-size-160.webp"
+								}
+							]
+						},
+						{
+							"_type": "marketing.faq",
+							"_key": "faq",
+							"variation": "two-column",
+							"headline": "Questions & Answers",
+							"items": [
+								{
+									"question": "Do I need a credit card to start the free trial?",
+									"answer": "Yes, but don't worry, you won't be charged until the trial period is over. We won't send you an email reminding you when this happens because we are really hoping you'll forget and we can keep charging you until your cards expires"
+								},
+								{
+									"question": "Can my whole team use the same inbox?",
+									"answer": "Yes, the more the merrier! Oatmeal works best when your entire company has access. We will charge you per additional seat, but we won't tell you about this until you get your invoice."
+								},
+								{
+									"question": "Is the AI agent actually a bunch of people in India?",
+									"answer": "Not just India! We have people in lots of countries around the world pretending to be an AI, including some that are currently under sanctions, so we can't legally mention them here."
+								},
+								{
+									"question": "Does Oatmeal replace my email client?",
+									"answer": "Absolutely. The idea is that we transition you away from email entirely, so you become completely dependent on our service. Like a parasite living off a host."
+								}
+							]
+						},
+						{
+							"_type": "marketing.pricing",
+							"_key": "pricing-plans",
+							"headline": "Pricing to fit your business needs.",
+							"plans": [
+								{
+									"name": "Starter",
+									"price": "$12",
+									"period": "/mo",
+									"description": "Small teams getting started with shared inboxes",
+									"features": "Shared inbox for up to 2 mailboxes\nTagging & assignment\nPrivate notes\nAutomatic replies\nEmail support",
+									"ctaLabel": "Start free trial",
+									"ctaUrl": "#"
+								},
+								{
+									"name": "Growth",
+									"price": "$49",
+									"period": "/mo",
+									"description": "Growing teams needing collaboration and insights",
+									"features": "Everything in Starter\nInbox Agent\nUnlimited mailboxes\nCollision detection\nSnippets and templates\nReporting dashboard\nSlack integration",
+									"ctaLabel": "Start free trial",
+									"ctaUrl": "#",
+									"highlighted": true
+								},
+								{
+									"name": "Pro",
+									"price": "$299",
+									"period": "/mo",
+									"description": "Support-focused organizations and larger teams",
+									"features": "Everything in Growth\nCustom roles & permissions\nAutomation engine\nAPI access\nSLA tracking\nSSO support\nSOC 2 compliance",
+									"ctaLabel": "Start free trial",
+									"ctaUrl": "#"
+								}
+							]
+						},
+						{
+							"_type": "marketing.cta",
+							"_key": "call-to-action",
+							"variation": "left-aligned",
+							"headline": "Ready to make customer support feel simple again?",
+							"subheadline": "Join hundreds of teams using Oatmeal to deliver faster, friendlier email support — using a massive network of low wage workers stationed around the globe",
+							"primaryCtaLabel": "Start free trial",
+							"primaryCtaUrl": "#",
+							"secondaryCtaLabel": "Book a demo",
+							"secondaryCtaUrl": "#"
+						}
+					]
+				}
+			},
+			{
+				"id": "about",
+				"slug": "about",
+				"status": "published",
+				"data": {
+					"title": "About Us",
+					"content": [
+						{
+							"_type": "marketing.hero",
+							"_key": "hero",
+							"variation": "left-aligned-with-photo",
+							"headline": "Your customer success is our mission.",
+							"subheadline": "We're on a mission to take the human element completely out of customer support — so your team can focus on what matters most, profitability.",
+							"photoUrl": "/img/photos/1.webp"
+						},
+						{
+							"_type": "marketing.stats",
+							"_key": "stats",
+							"eyebrow": "Built for scale",
+							"headline": "The inbox powering customer conversations everywhere.",
+							"subheadline": "Oatmeal helps teams deliver personal, organized, and fast customer support across the world. From small startups to enterprise teams, we process millions of messages each month — using a massive network of low wage workers stationed around the globe.",
+							"stats": [
+								{
+									"stat": "2M+",
+									"text": "Emails manually processed every week across thousands of teams."
+								},
+								{
+									"stat": "99.98%",
+									"text": "Uptime — because your customers never stop complaining."
+								}
+							]
+						},
+						{
+							"_type": "marketing.testimonials",
+							"_key": "testimonial",
+							"testimonials": [
+								{
+									"quote": "Ever since we started using Oatmeal, our customer satisfaction scores have skyrocketed. The personal touch that their human-AI hybrid support provides is unparalleled.",
+									"author": "Lynn Marshall",
+									"role": "Founder",
+									"company": "Pine Labs",
+									"avatar": "/img/avatars/16-h-1000-w-1400.webp"
+								}
+							]
+						},
+						{
+							"_type": "marketing.team",
+							"_key": "team",
+							"headline": "Our leadership team",
+							"subheadline": "Oatmeals's leadership team combines decades of experience in private equity, where they honed their skills in cost-cutting and maximizing shareholder value.",
+							"serviceSlug": "shared-inbox",
+							"members": [
+								{
+									"name": "Leslie Alexander",
+									"byline": "Co-Founder / CEO",
+									"img": "/img/avatars/1-h-1000-w-800.webp"
+								},
+								{
+									"name": "Michael Foster",
+									"byline": "Co-Founder / CTO",
+									"img": "/img/avatars/2-h-1000-w-800.webp"
+								},
+								{
+									"name": "Dries Vincent",
+									"byline": "Business Relations",
+									"img": "/img/avatars/7-h-1000-w-800.webp"
+								},
+								{
+									"name": "Lindsay Walton",
+									"byline": "Front-end Developer",
+									"img": "/img/avatars/4-h-1000-w-800.webp"
+								},
+								{
+									"name": "Noor Hasan",
+									"byline": "Designer",
+									"img": "/img/avatars/5-h-1000-w-800.webp"
+								},
+								{
+									"name": "Tom Cook",
+									"byline": "Director of Product",
+									"img": "/img/avatars/6-h-1000-w-800.webp"
+								},
+								{
+									"name": "Whitney Francis",
+									"byline": "Copywriter",
+									"img": "/img/avatars/8-h-1000-w-800.webp"
+								},
+								{
+									"name": "Leonard Wu",
+									"byline": "Senior Designer",
+									"img": "/img/avatars/3-h-1000-w-800.webp"
+								}
+							]
+						},
+						{
+							"_type": "marketing.cta",
+							"_key": "call-to-action",
+							"variation": "left-aligned",
+							"headline": "Have anymore questions?",
+							"subheadline": "Chat to someone on our sales team, who will make promises about our roadmap that we won't keep.",
+							"primaryCtaLabel": "Chat with us",
+							"primaryCtaUrl": "#",
+							"secondaryCtaLabel": "Book a demo",
+							"secondaryCtaUrl": "#"
+						}
+					]
+				}
+			},
+			{
+				"id": "pricing",
+				"slug": "pricing",
+				"status": "published",
+				"data": {
+					"title": "Pricing",
+					"content": [
+						{
+							"_type": "marketing.hero",
+							"_key": "pricing-hero",
+							"variation": "pricing-hero-multi-tier",
+							"headline": "Pricing",
+							"subheadline": "Simplify your shared inbox, collaborate effortlessly, and give every customer a reply that feels personal, even if it was written by a bot.",
+							"plans": [
+								{
+									"name": "Starter",
+									"priceMonthly": "$12",
+									"priceYearly": "$120",
+									"description": "Small teams getting started with shared inboxes",
+									"features": "Shared inbox for up to 2 mailboxes\nTagging & assignment\nPrivate notes\nAutomatic replies\nEmail support",
+									"ctaLabel": "Start free trial",
+									"ctaUrl": "#"
+								},
+								{
+									"name": "Growth",
+									"priceMonthly": "$49",
+									"priceYearly": "$490",
+									"description": "Growing teams needing collaboration and insights",
+									"features": "Everything in Starter\nInbox Agent\nUnlimited mailboxes\nCollision detection\nSnippets and templates\nReporting dashboard\nSlack integration",
+									"ctaLabel": "Start free trial",
+									"ctaUrl": "#",
+									"badge": "Most popular",
+									"highlighted": true
+								},
+								{
+									"name": "Pro",
+									"priceMonthly": "$299",
+									"priceYearly": "$2990",
+									"description": "Support-focused organizations and larger teams",
+									"features": "Everything in Growth\nCustom roles & permissions\nAutomation engine\nAPI access\nSLA tracking\nSSO support\nSOC 2 compliance",
+									"ctaLabel": "Start free trial",
+									"ctaUrl": "#"
+								}
+							]
+						},
+						{
+							"_type": "marketing.comparison",
+							"_key": "pricing-comparison",
+							"items": [
+								{ "groupName": "Collaboration", "name": "Shared inboxes", "starterValue": "2", "growthValue": "Unlimited", "proValue": "Unlimited" },
+								{ "groupName": "Collaboration", "name": "Private notes", "starterValue": "true", "growthValue": "true", "proValue": "true" },
+								{ "groupName": "Collaboration", "name": "Tagging & assignment", "starterValue": "true", "growthValue": "true", "proValue": "true" },
+								{ "groupName": "Collaboration", "name": "Collision detection", "starterValue": "false", "growthValue": "true", "proValue": "true" },
+								{ "groupName": "Collaboration", "name": "Real-time activity indicators", "starterValue": "false", "growthValue": "true", "proValue": "true" },
+								{ "groupName": "Collaboration", "name": "Internal chat", "starterValue": "false", "growthValue": "true", "proValue": "true" },
+								
+								{ "groupName": "Automation", "name": "Automatic replies", "starterValue": "true", "growthValue": "true", "proValue": "true" },
+								{ "groupName": "Automation", "name": "Inbox Agent", "starterValue": "false", "growthValue": "true", "proValue": "true" },
+								{ "groupName": "Automation", "name": "Automation engine", "starterValue": "false", "growthValue": "true", "proValue": "true" },
+								{ "groupName": "Automation", "name": "Snippets and templates", "starterValue": "false", "growthValue": "true", "proValue": "true" },
+								{ "groupName": "Automation", "name": "SLA tracking", "starterValue": "false", "growthValue": "false", "proValue": "true" },
+								
+								{ "groupName": "Team Management", "name": "Unlimited users", "starterValue": "Up to 5", "growthValue": "true", "proValue": "true" },
+								{ "groupName": "Team Management", "name": "Reporting dashboard", "starterValue": "false", "growthValue": "true", "proValue": "true" },
+								{ "groupName": "Team Management", "name": "Slack integration", "starterValue": "false", "growthValue": "true", "proValue": "true" },
+								{ "groupName": "Team Management", "name": "Roles & permissions", "starterValue": "false", "growthValue": "false", "proValue": "true" },
+								{ "groupName": "Team Management", "name": "SSO support", "starterValue": "false", "growthValue": "false", "proValue": "true" },
+								
+								{ "groupName": "Support", "name": "Email support", "starterValue": "true", "growthValue": "true", "proValue": "true" },
+								{ "groupName": "Support", "name": "Priority response", "starterValue": "false", "growthValue": "true", "proValue": "true" },
+								{ "groupName": "Support", "name": "Dedicated manager", "starterValue": "false", "growthValue": "false", "proValue": "true" }
+							]
+						},
+						{
+							"_type": "marketing.testimonials",
+							"_key": "testimonial",
+							"testimonials": [
+								{
+									"quote": "Ever since we started using Oatmeal, our customer satisfaction scores have skyrocketed. The personal touch that their human-AI hybrid support provides is unparalleled.",
+									"author": "Lynn Marshall",
+									"role": "Founder",
+									"company": "Pine Labs",
+									"avatar": "/img/avatars/16-h-1000-w-1400.webp"
+								}
+							]
+						},
+						{
+							"_type": "marketing.faq",
+							"_key": "pricing-faq",
+							"variation": "centered",
+							"headline": "Questions & Answers",
+							"items": [
+								{
+									"question": "Do I need a credit card to start the free trial?",
+									"answer": "Yes, but don't worry, you won't be charged until the trial period is over. We won't send you an email reminding you when this happens because we are really hoping you'll forget and we can keep charging you until your cards expires"
+								},
+								{
+									"question": "Can my whole team use the same inbox?",
+									"answer": "Yes, the more the merrier! Oatmeal works best when your entire company has access. We will charge you per additional seat, but we won't tell you about this until you get your invoice."
+								},
+								{
+									"question": "Is the AI agent actually a bunch of people in India?",
+									"answer": "Not just India! We have people in lots of countries around the world pretending to be an AI, including some that are currently under sanctions, so we can't legally mention them here."
+								},
+								{
+									"question": "Does Oatmeal replace my email client?",
+									"answer": "Absolutely. The idea is that we transition you away from email entirely, so you become completely dependent on our service. Like a parasite living off a host."
+								}
+							]
+						},
+						{
+							"_type": "marketing.cta",
+							"_key": "call-to-action",
+							"variation": "centered",
+							"headline": "Have anymore questions?",
+							"subheadline": "Chat to someone on our sales team, who will make promises about our roadmap that we won't keep.",
+							"primaryCtaLabel": "Chat with us",
+							"primaryCtaUrl": "#",
+							"secondaryCtaLabel": "Book a demo",
+							"secondaryCtaUrl": "#"
+						}
+					]
+				}
+			},
+			{
+				"id": "privacy-policy",
+				"slug": "privacy-policy",
+				"status": "published",
+				"data": {
+					"title": "Privacy Policy",
+					"content": [
+						{
+							"_type": "marketing.document",
+							"_key": "document",
+							"headline": "Privacy Policy",
+							"subheadline": "Last updated on December 19, 2025.",
+							"content": "<p>Company Inc. (\"<strong>Company</strong>,\" \"<strong>we</strong>,\" \"<strong>us</strong>,\" or \"<strong>our</strong>\") respects your privacy and is committed to protecting your personal information. This Privacy Policy describes, in general terms, how we collect, use, store, and protect information when you interact with our websites, products, or services (collectively, the \"<strong>Services</strong>\"). This policy is provided for informational purposes and is intended to be a general example only.</p><h2>Information We Collect and How We Use It</h2><p>We may collect information that you voluntarily provide to us when you interact with the Services, such as when you contact us, create an account, or otherwise communicate with us. This information may include basic personal or account details, such as your name, email address, or similar contact information.</p><p>We may also automatically collect limited technical or usage information when you use the Services. This may include information such as browser type, device or operating system details, IP address, and general usage data.</p><p>Information we collect may be used for purposes such as:</p><ul><li>Providing and maintaining the Services</li><li>Responding to inquiries and communications</li><li>Improving features and functionality</li><li>Complying with applicable legal obligations</li></ul><h2>Sharing, Retention, and Security of Information</h2><p>We do not sell your personal information. We may share information with third-party service providers who perform services on our behalf, such as hosting or technical support, and only to the extent necessary for them to perform those services. We may also disclose information if required to do so by law or in response to valid legal requests.</p><p>We retain information only for as long as reasonably necessary to fulfill the purposes described in this Privacy Policy, unless a longer retention period is required or permitted by law.</p><p>We take reasonable administrative, technical, and organizational measures designed to protect information from unauthorized access, use, alteration, or disclosure. However, no method of transmission over the internet or method of electronic storage is completely secure, and we cannot guarantee absolute security.</p><h2>Your Choices, Updates, and Contact Information</h2><p>You may choose not to provide certain information to us, though doing so may limit your ability to use some features of the Services. Depending on your location, you may have certain rights regarding your personal information under applicable laws.</p><p>We may update this Privacy Policy from time to time. Any changes will be reflected by updating the \"<strong>Last updated</strong>\" date at the top of this page. Continued use of the Services after any changes indicates acceptance of the updated policy.</p><p>If you have any questions about this Privacy Policy, please contact us at:</p><p><strong>Company Inc.</strong><br />Email: <a href=\"mailto:privacy@company.example\">privacy@company.example</a><br />Address: 123 Demo Street, Example City, Country</p>"
+						}
+					]
+				}
+			}
+		],
+		"services": [
+			{
+				"id": "shared-inbox",
+				"slug": "shared-inbox",
+				"status": "published",
+				"data": {
+					"title": "Shared Inbox",
+					"description": "Keep every customer conversation in one clean, collaborative inbox."
+				}
+			}
+		],
+		"testimonials": [
+			{
+				"id": "t1",
+				"slug": "jordan-rogers",
+				"status": "published",
+				"data": {
+					"quote": "Oatmeal has completely transformed our customer support operations. To be fair, we weren't doing any customer support at all so the bar was pretty low.",
+					"author": "Jordan Rogers",
+					"role": "Founder",
+					"company": "Anomaly",
+					"avatar": {
+						"$media": {
+							"url": "http://127.0.0.1:4321/img/avatars/10-size-160.webp",
+							"alt": "Jordan Rogers avatar",
+							"filename": "10-size-160.webp"
+						}
+					},
+					"service": "$ref:shared-inbox"
+				}
+			},
+			{
+				"id": "t2",
+				"slug": "lynn-marshall",
+				"status": "published",
+				"data": {
+					"quote": "We use Oatmeal's automation features to make cancellation requests disappear into a black hole, improving our retention rates by over 300%.",
+					"author": "Lynn Marshall",
+					"role": "Founder",
+					"company": "Pine Labs",
+					"avatar": {
+						"$media": {
+							"url": "http://127.0.0.1:4321/img/avatars/15-size-160.webp",
+							"alt": "Lynn Marshall avatar",
+							"filename": "15-size-160.webp"
+						}
+					},
+					"service": "$ref:shared-inbox"
+				}
+			},
+			{
+				"id": "t3",
+				"slug": "rajat-singh",
+				"status": "published",
+				"data": {
+					"quote": "I've been using the spare time that Oatmeal has freed up to work not just one, but two other jobs, all while hitting my core KPIs. My bosses have no idea.",
+					"author": "Rajat Singh",
+					"role": "Head of Support",
+					"company": "Concise",
+					"avatar": {
+						"$media": {
+							"url": "http://127.0.0.1:4321/img/avatars/13-size-160.webp",
+							"alt": "Rajat Singh avatar",
+							"filename": "13-size-160.webp"
+						}
+					},
+					"service": "$ref:shared-inbox"
+				}
+			},
+			{
+				"id": "t4",
+				"slug": "john-walters",
+				"status": "published",
+				"data": {
+					"quote": "Oatmeal has given us key insights into how much our customers absolutely hate using our product and how we can improve it to stop them from leaving us.",
+					"author": "John Walters",
+					"role": "CPO",
+					"company": "Orbital",
+					"avatar": {
+						"$media": {
+							"url": "http://127.0.0.1:4321/img/avatars/12-size-160.webp",
+							"alt": "John Walters avatar",
+							"filename": "12-size-160.webp"
+						}
+					},
+					"service": "$ref:shared-inbox"
+				}
+			},
+			{
+				"id": "t5",
+				"slug": "noah-gold",
+				"status": "published",
+				"data": {
+					"quote": "As a solo founder, Oatmeal has been a lifesaver. It makes it look like Looply is an actual company with multiple employees, when in reality it's just me and an AI.",
+					"author": "Noah Gold",
+					"role": "CEO",
+					"company": "Looply",
+					"avatar": {
+						"$media": {
+							"url": "http://127.0.0.1:4321/img/avatars/11-size-160.webp",
+							"alt": "Noah Gold avatar",
+							"filename": "11-size-160.webp"
+						}
+					},
+					"service": "$ref:shared-inbox"
+				}
+			},
+			{
+				"id": "t6",
+				"slug": "mark-levinson",
+				"status": "published",
+				"data": {
+					"quote": "Thanks to Oatmeal, we've managed to cut our support costs in half by laying off dozens of employees, while still improving response times and customer satisfaction.",
+					"author": "Mark Levinson",
+					"role": "COO",
+					"company": "Quirk",
+					"avatar": {
+						"$media": {
+							"url": "http://127.0.0.1:4321/img/avatars/14-size-160.webp",
+							"alt": "Mark Levinson avatar",
+							"filename": "14-size-160.webp"
+						}
+					},
+					"service": "$ref:shared-inbox"
+				}
+			}
+		],
+		"faqs": [
+			{
+				"id": "faq1",
+				"slug": "credit-card-trial",
+				"status": "published",
+				"data": {
+					"question": "Do I need a credit card to start the free trial?",
+					"answer": "Yes, but don't worry, you won't be charged until the trial period is over. We won't send you an email reminding you when this happens because we are really hoping you'll forget and we can keep charging you until your cards expires",
+					"service": "$ref:shared-inbox"
+				}
+			},
+			{
+				"id": "faq2",
+				"slug": "team-same-inbox",
+				"status": "published",
+				"data": {
+					"question": "Can my whole team use the same inbox?",
+					"answer": "Yes, the more the merrier! Oatmeal works best when your entire company has access. We will charge you per additional seat, but we won't tell you about this until you get your invoice.",
+					"service": "$ref:shared-inbox"
+				}
+			},
+			{
+				"id": "faq3",
+				"slug": "ai-agent-reality",
+				"status": "published",
+				"data": {
+					"question": "Is the AI agent actually a bunch of people in India?",
+					"answer": "Not just India! We have people in lots of countries around the world pretending to be an AI, including some that are currently under sanctions, so we can't legally mention them here.",
+					"service": "$ref:shared-inbox"
+				}
+			},
+			{
+				"id": "faq4",
+				"slug": "replace-email-client",
+				"status": "published",
+				"data": {
+					"question": "Does Oatmeal replace my email client?",
+					"answer": "Absolutely. The idea is that we transition you away from email entirely, so you become completely dependent on our service. Like a parasite living off a host.",
+					"service": "$ref:shared-inbox"
+				}
+			}
+		],
+		"pricing": [
+			{
+				"id": "price-starter",
+				"slug": "starter",
+				"status": "published",
+				"data": {
+					"name": "Starter",
+					"price": "$12",
+					"price_monthly": "$12",
+					"price_yearly": "$120",
+					"period": "/mo",
+					"description": "Small teams getting started with shared inboxes",
+					"features": "Shared inbox for up to 2 mailboxes\nTagging & assignment\nPrivate notes\nAutomatic replies\nEmail support",
+					"cta_label": "Start free trial",
+					"cta_url": "#",
+					"highlighted": false,
+					"service": "$ref:shared-inbox"
+				}
+			},
+			{
+				"id": "price-growth",
+				"slug": "growth",
+				"status": "published",
+				"data": {
+					"name": "Growth",
+					"price": "$49",
+					"price_monthly": "$49",
+					"price_yearly": "$490",
+					"period": "/mo",
+					"description": "Growing teams needing collaboration and insights",
+					"features": "Everything in Starter\nInbox Agent\nUnlimited mailboxes\nCollision detection\nSnippets and templates\nReporting dashboard\nSlack integration",
+					"cta_label": "Start free trial",
+					"cta_url": "#",
+					"badge": "Most popular",
+					"highlighted": true,
+					"service": "$ref:shared-inbox"
+				}
+			},
+			{
+				"id": "price-pro",
+				"slug": "pro",
+				"status": "published",
+				"data": {
+					"name": "Pro",
+					"price": "$299",
+					"price_monthly": "$299",
+					"price_yearly": "$2990",
+					"period": "/mo",
+					"description": "Support-focused organizations and larger teams",
+					"features": "Everything in Growth\nCustom roles & permissions\nAutomation engine\nAPI access\nSLA tracking\nSSO support\nSOC 2 compliance",
+					"cta_label": "Start free trial",
+					"cta_url": "#",
+					"highlighted": false,
+					"service": "$ref:shared-inbox"
+				}
+			}
+		],
+		"team": [
+			{
+				"id": "team-leslie",
+				"slug": "leslie-alexander",
+				"status": "published",
+				"data": {
+					"name": "Leslie Alexander",
+					"role": "Co-Founder / CEO",
+					"image": {
+						"$media": {
+							"url": "http://127.0.0.1:4321/img/avatars/1-h-1000-w-800.webp",
+							"alt": "Leslie Alexander photo",
+							"filename": "1-h-1000-w-800.webp"
+						}
+					},
+					"service": "$ref:shared-inbox"
+				}
+			},
+			{
+				"id": "team-michael",
+				"slug": "michael-foster",
+				"status": "published",
+				"data": {
+					"name": "Michael Foster",
+					"role": "Co-Founder / CTO",
+					"image": {
+						"$media": {
+							"url": "http://127.0.0.1:4321/img/avatars/2-h-1000-w-800.webp",
+							"alt": "Michael Foster photo",
+							"filename": "2-h-1000-w-800.webp"
+						}
+					},
+					"service": "$ref:shared-inbox"
+				}
+			},
+			{
+				"id": "team-dries",
+				"slug": "dries-vincent",
+				"status": "published",
+				"data": {
+					"name": "Dries Vincent",
+					"role": "Business Relations",
+					"image": {
+						"$media": {
+							"url": "http://127.0.0.1:4321/img/avatars/7-h-1000-w-800.webp",
+							"alt": "Dries Vincent photo",
+							"filename": "7-h-1000-w-800.webp"
+						}
+					},
+					"service": "$ref:shared-inbox"
+				}
+			},
+			{
+				"id": "team-lindsay",
+				"slug": "lindsay-walton",
+				"status": "published",
+				"data": {
+					"name": "Lindsay Walton",
+					"role": "Front-end Developer",
+					"image": {
+						"$media": {
+							"url": "http://127.0.0.1:4321/img/avatars/4-h-1000-w-800.webp",
+							"alt": "Lindsay Walton photo",
+							"filename": "4-h-1000-w-800.webp"
+						}
+					},
+					"service": "$ref:shared-inbox"
+				}
+			},
+			{
+				"id": "team-noor",
+				"slug": "noor-hasan",
+				"status": "published",
+				"data": {
+					"name": "Noor Hasan",
+					"role": "Designer",
+					"image": {
+						"$media": {
+							"url": "http://127.0.0.1:4321/img/avatars/5-h-1000-w-800.webp",
+							"alt": "Noor Hasan photo",
+							"filename": "5-h-1000-w-800.webp"
+						}
+					},
+					"service": "$ref:shared-inbox"
+				}
+			},
+			{
+				"id": "team-tom",
+				"slug": "tom-cook",
+				"status": "published",
+				"data": {
+					"name": "Tom Cook",
+					"role": "Director of Product",
+					"image": {
+						"$media": {
+							"url": "http://127.0.0.1:4321/img/avatars/6-h-1000-w-800.webp",
+							"alt": "Tom Cook photo",
+							"filename": "6-h-1000-w-800.webp"
+						}
+					},
+					"service": "$ref:shared-inbox"
+				}
+			},
+			{
+				"id": "team-whitney",
+				"slug": "whitney-francis",
+				"status": "published",
+				"data": {
+					"name": "Whitney Francis",
+					"role": "Copywriter",
+					"image": {
+						"$media": {
+							"url": "http://127.0.0.1:4321/img/avatars/8-h-1000-w-800.webp",
+							"alt": "Whitney Francis photo",
+							"filename": "8-h-1000-w-800.webp"
+						}
+					},
+					"service": "$ref:shared-inbox"
+				}
+			},
+			{
+				"id": "team-leonard",
+				"slug": "leonard-wu",
+				"status": "published",
+				"data": {
+					"name": "Leonard Wu",
+					"role": "Senior Designer",
+					"image": {
+						"$media": {
+							"url": "http://127.0.0.1:4321/img/avatars/3-h-1000-w-800.webp",
+							"alt": "Leonard Wu photo",
+							"filename": "3-h-1000-w-800.webp"
+						}
+					},
+					"service": "$ref:shared-inbox"
+				}
+			}
+		]
+	}
+}

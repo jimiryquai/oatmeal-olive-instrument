@@ -1,0 +1,62 @@
+---
+import { clsx } from 'clsx/lite'
+import CheckmarkIcon from '../icons/checkmark-icon.astro'
+import Squares2StackedIcon from '../icons/squares-2-stacked-icon.astro'
+
+interface Props {
+  snippet: string
+  variant?: 'normal' | 'overlay'
+  class?: string
+  [key: string]: any
+}
+
+const {
+  snippet,
+  variant = 'normal',
+  class: className,
+  ...props
+} = Astro.props
+---
+<div
+  class={clsx(
+    'flex items-center justify-between gap-6 rounded-full p-1 font-mono text-sm/7 inset-ring-1 dark:bg-white/10 dark:inset-ring-white/10',
+    variant === 'normal' && 'bg-white text-olive-600 inset-ring-black/10 dark:text-white',
+    variant === 'overlay' && 'bg-white/15 text-white inset-ring-white/10',
+    className,
+  )}
+  {...props}
+>
+  <div class="flex items-center gap-2 pl-3">
+    <div class="text-current/60 select-none">$</div>
+    <div>{snippet}</div>
+  </div>
+  <button
+    type="button"
+    class="copy-btn group relative flex size-9 items-center justify-center rounded-full after:absolute after:-inset-1 hover:bg-olive-950/10 dark:hover:bg-white/10 after:pointer-fine:hidden"
+    data-snippet={snippet}
+  >
+    <Squares2StackedIcon class="group-data-copied:hidden" />
+    <CheckmarkIcon class="not-group-data-copied:hidden" />
+  </button>
+</div>
+
+<script>
+  // Setup click handler for copy to clipboard
+  const buttons = document.querySelectorAll('.copy-btn');
+  buttons.forEach((button) => {
+    button.addEventListener('click', async () => {
+      const snippet = button.getAttribute('data-snippet');
+      if (snippet) {
+        try {
+          await navigator.clipboard.writeText(snippet);
+          button.setAttribute('data-copied', 'true');
+          setTimeout(() => {
+            button.removeAttribute('data-copied');
+          }, 2000);
+        } catch (err) {
+          console.error('Failed to copy text: ', err);
+        }
+      }
+    });
+  });
+</script>

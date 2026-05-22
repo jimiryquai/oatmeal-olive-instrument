@@ -1,0 +1,70 @@
+---
+import TeamFourColumnGrid from "@/components/sections/TeamFourColumnGrid.astro";
+import TeamMember from "@/components/sections/TeamMember.astro";
+import { getEmDashEntry, getEmDashCollection } from "emdash";
+import { Image } from "emdash/ui";
+
+interface MemberItem {
+	name: string;
+	byline: string;
+	img?: any;
+}
+
+interface Props {
+	node: {
+		_key?: string;
+		headline?: string;
+		subheadline?: string;
+		members: MemberItem[];
+		serviceSlug?: string;
+	};
+}
+
+const { node } = Astro.props;
+const { _key, headline, subheadline, members = [], serviceSlug } = node;
+
+let membersData = members;
+
+if (serviceSlug) {
+	const { entry: service } = await getEmDashEntry("services", serviceSlug);
+	if (service) {
+		const { entries } = await getEmDashCollection("team", {
+			where: { service: service.data.id as string },
+		});
+		if (entries && entries.length > 0) {
+			membersData = entries.map((entry) => ({
+				name: String(entry.data.name ?? ""),
+				byline: String(entry.data.role ?? ""),
+				img: entry.data.image,
+			}));
+		}
+	}
+}
+---
+
+<TeamFourColumnGrid
+	id={_key || "team"}
+	headline={headline}
+	subheadline={subheadline}
+>
+	{
+		membersData.map((m) => (
+			<TeamMember
+				name={m.name}
+				byline={m.byline}
+			>
+				{m.img && (
+					<Image
+						slot="img"
+						image={m.img}
+						alt=""
+						class="not-dark:bg-white/75 dark:bg-black/75"
+						width={800}
+						height={1000}
+					/>
+				)}
+			</TeamMember>
+		))
+	}
+</TeamFourColumnGrid>
+

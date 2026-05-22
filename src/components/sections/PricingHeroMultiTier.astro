@@ -1,0 +1,108 @@
+---
+import { clsx } from 'clsx/lite'
+import Container from '../elements/container.astro'
+import Heading from '../elements/heading.astro'
+import Text from '../elements/text.astro'
+
+interface Props {
+  eyebrow?: string
+  headline?: string
+  subheadline?: string
+  class?: string
+  [key: string]: any
+}
+
+const { class: className, eyebrow, headline, subheadline, ...props } = Astro.props
+---
+<section class={clsx('py-16', className)} {...props}>
+  <div class="pricing-tabs-container">
+    <Container class="flex flex-col gap-16">
+      <div class="flex flex-col items-center gap-6">
+        {eyebrow}
+        <slot name="eyebrow" />
+        <Heading>
+          {headline}
+          <slot name="headline" />
+        </Heading>
+        {(subheadline || Astro.slots.has('subheadline')) && (
+          <Text size="lg" class="flex max-w-xl flex-col gap-4 text-center">
+            {subheadline}
+            <slot name="subheadline" />
+          </Text>
+        )}
+        <div role="tablist" class="flex items-center gap-1 rounded-full bg-olive-950/5 p-1 dark:bg-white/5">
+          <button
+            type="button"
+            role="tab"
+            aria-selected="true"
+            aria-controls="panel-monthly"
+            class="tab-btn rounded-full px-4 py-1 text-sm/7 font-medium text-olive-950 aria-selected:bg-olive-950 aria-selected:text-white dark:text-white dark:aria-selected:bg-white/10 dark:aria-selected:text-white"
+            data-tab="monthly"
+          >
+            Monthly
+          </button>
+          <button
+            type="button"
+            role="tab"
+            aria-selected="false"
+            aria-controls="panel-yearly"
+            class="tab-btn rounded-full px-4 py-1 text-sm/7 font-medium text-olive-950 aria-selected:bg-olive-950 aria-selected:text-white dark:text-white dark:aria-selected:bg-white/10 dark:aria-selected:text-white"
+            data-tab="yearly"
+          >
+            Yearly
+          </button>
+        </div>
+      </div>
+      <div>
+        <div
+          id="panel-monthly"
+          role="tabpanel"
+          class="tab-panel grid grid-cols-1 gap-2 sm:has-[>:nth-child(5)]:grid-cols-2 sm:max-lg:has-[>:last-child:nth-child(even)]:grid-cols-2 lg:auto-cols-fr lg:grid-flow-col lg:grid-cols-none lg:has-[>:nth-child(5)]:grid-flow-row lg:has-[>:nth-child(5)]:grid-cols-3"
+        >
+          <slot name="monthly-plans" />
+        </div>
+        <div
+          id="panel-yearly"
+          role="tabpanel"
+          class="tab-panel hidden grid grid-cols-1 gap-2 sm:has-[>:nth-child(5)]:grid-cols-2 sm:max-lg:has-[>:last-child:nth-child(even)]:grid-cols-2 lg:auto-cols-fr lg:grid-flow-col lg:grid-cols-none lg:has-[>:nth-child(5)]:grid-flow-row lg:has-[>:nth-child(5)]:grid-cols-3"
+        >
+          <slot name="yearly-plans" />
+        </div>
+      </div>
+      <slot name="footer" />
+    </Container>
+  </div>
+</section>
+
+<script>
+  function setupPricingTabs() {
+    const containers = document.querySelectorAll('.pricing-tabs-container');
+    containers.forEach(container => {
+      const buttons = container.querySelectorAll('.tab-btn');
+      const panels = container.querySelectorAll('.tab-panel');
+
+      buttons.forEach(button => {
+        button.addEventListener('click', () => {
+          const tab = button.getAttribute('data-tab');
+          
+          buttons.forEach(btn => btn.setAttribute('aria-selected', 'false'));
+          button.setAttribute('aria-selected', 'true');
+
+          panels.forEach(panel => {
+            if (panel.id === `panel-${tab}`) {
+              panel.classList.remove('hidden');
+            } else {
+              panel.classList.add('hidden');
+            }
+          });
+        });
+      });
+    });
+  }
+
+  // Setup on initial load
+  setupPricingTabs();
+
+  // Setup on view transitions if active
+  document.addEventListener('astro:after-swap', setupPricingTabs);
+</script>

@@ -1,0 +1,34 @@
+---
+import { clsx } from 'clsx/lite'
+import Container from '../elements/container.astro'
+import Subheading from '../elements/subheading.astro'
+import Text from '../elements/text.astro'
+
+interface Props {
+  headline?: string
+  subheadline?: string
+  class?: string
+  [key: string]: any
+}
+
+const { headline, subheadline, class: className, ...props } = Astro.props
+---
+<section class={clsx('py-16', className)} {...props}>
+  <Container class="flex flex-col items-center gap-10">
+    <div class="flex flex-col gap-6">
+      {(headline || Astro.slots.has('headline')) && (
+        <Subheading class="max-w-4xl text-center">
+          {headline}
+          <slot name="headline" />
+        </Subheading>
+      )}
+      {(subheadline || Astro.slots.has('subheadline')) && (
+        <Text class="flex max-w-3xl flex-col gap-4 text-center text-pretty">
+          {subheadline}
+          <slot name="subheadline" />
+        </Text>
+      )}
+    </div>
+    <slot name="cta" />
+  </Container>
+</section>

@@ -1,0 +1,22 @@
+---
+import { clsx } from 'clsx/lite'
+
+interface Props {
+  color?: 'dark/light' | 'light'
+  class?: string
+  [key: string]: any
+}
+
+const { color = 'dark/light', class: className, ...props } = Astro.props
+---
+<h1
+  class={clsx(
+    'font-display text-5xl/12 tracking-tight text-balance sm:text-[5rem]/20',
+    color === 'dark/light' && 'text-olive-950 dark:text-white',
+    color === 'light' && 'text-white',
+    className,
+  )}
+  {...props}
+>
+  <slot />
+</h1>

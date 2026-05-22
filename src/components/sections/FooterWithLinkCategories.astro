@@ -1,0 +1,23 @@
+---
+import { clsx } from 'clsx/lite'
+import Container from '../elements/container.astro'
+
+interface Props {
+  class?: string
+  [key: string]: any
+}
+
+const { class: className, ...props } = Astro.props
+---
+<footer class={clsx('pt-16', className)} {...props}>
+  <div class="bg-olive-950/2.5 py-16 text-olive-950 dark:bg-white/5 dark:text-white">
+    <Container class="flex flex-col gap-16">
+      <nav class="grid grid-cols-2 gap-6 text-sm/7 sm:has-[>:last-child:nth-child(3)]:grid-cols-3 sm:has-[>:nth-child(5)]:grid-cols-3 md:has-[>:last-child:nth-child(4)]:grid-cols-4 lg:has-[>:nth-child(5)]:grid-cols-5">
+        <slot name="links" />
+      </nav>
+      <div class="text-sm/7 text-olive-600 dark:text-olive-500">
+        <slot name="fineprint" />
+      </div>
+    </Container>
+  </div>
+</footer>

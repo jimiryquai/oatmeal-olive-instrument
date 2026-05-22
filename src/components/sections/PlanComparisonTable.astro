@@ -1,0 +1,196 @@
+---
+import { clsx } from 'clsx/lite'
+import Container from '../elements/container.astro'
+import CheckmarkIcon from '../icons/checkmark-icon.astro'
+import MinusIcon from '../icons/minus-icon.astro'
+
+interface Props {
+  plans: string[]
+  features: {
+    title: string
+    features: { name: string; value: any }[]
+  }[]
+  class?: string
+  [key: string]: any
+}
+
+const { plans = [], features = [], class: className, ...props } = Astro.props
+
+function isRecord(value: any): value is Record<string, any> {
+  return typeof value === 'object' && value !== null
+}
+---
+<section class={clsx('py-16', className)} {...props}>
+  <Container>
+    {/* Desktop view */}
+    <table class="w-full border-collapse text-left text-sm/5 max-sm:hidden">
+      <colgroup>
+        <col class="w-2/5" />
+        {plans.map(() => (
+          <col style={`width: calc(60% / ${plans.length})`} />
+        ))}
+      </colgroup>
+      <thead>
+        <tr>
+          <th class="sticky top-(--scroll-padding-top) bg-olive-100 py-5 pr-3 text-base/7 font-medium text-olive-950 dark:bg-olive-950 dark:text-white">
+            Compare features
+          </th>
+          {plans.map((plan) => (
+            <th class="sticky top-(--scroll-padding-top) bg-olive-100 p-3 text-center font-semibold text-olive-950 dark:bg-olive-950 dark:text-white">
+              {plan}
+            </th>
+          ))}
+        </tr>
+      </thead>
+      {features.map((group) => (
+        <tbody>
+          <tr>
+            <th
+              colspan={plans.length + 1}
+              scope="colgroup"
+              class="border-t border-b border-t-olive-950/5 border-b-olive-950/10 pt-14 pb-4 font-semibold text-olive-950 dark:border-t-white/5 dark:border-b-white/10 dark:text-white"
+            >
+              {group.title}
+            </th>
+          </tr>
+          {group.features.map((feature) => (
+            <tr class="group">
+              <th
+                scope="row"
+                class="border-t border-olive-950/5 py-4 pr-3 font-normal text-olive-700 group-first:border-olive-950/10 dark:border-white/5 dark:text-olive-400 dark:group-first:border-white/10"
+              >
+                {feature.name}
+              </th>
+              {plans.map((plan) => {
+                const value = isRecord(feature.value) && plan in feature.value
+                  ? feature.value[plan]
+                  : feature.value
+
+                return (
+                  <td class="border-t border-olive-950/5 px-3 py-4 text-center text-olive-700 group-first:border-olive-950/10 dark:border-white/10 dark:text-olive-400 dark:group-first:border-white/10">
+                    <div class="flex justify-center items-center">
+                      {value === true ? (
+                        <CheckmarkIcon aria-label="Included" class="stroke-olive-950 dark:stroke-white" />
+                      ) : value === false ? (
+                        <MinusIcon aria-label="Not included" class="stroke-olive-950 dark:stroke-white" />
+                      ) : (
+                        value
+                      )}
+                    </div>
+                  </td>
+                )
+              })}
+            </tr>
+          ))}
+        </tbody>
+      ))}
+    </table>
+
+    {/* Mobile view */}
+    <div class="sm:hidden comparison-tabs-container">
+      <div role="tablist" class="flex gap-6 border-b border-olive-950/10 dark:border-white/10">
+        {plans.map((plan, index) => (
+          <button
+            type="button"
+            role="tab"
+            aria-selected={index === 0 ? "true" : "false"}
+            aria-controls={`comparison-panel-${plan}`}
+            class="comparison-tab-btn relative -mb-px flex-1 border-b px-2 py-6 text-sm/5 font-medium text-olive-500 aria-selected:border-olive-950 aria-selected:text-olive-950 dark:aria-selected:border-white dark:aria-selected:text-white"
+            data-tab={plan}
+          >
+            {plan}
+          </button>
+        ))}
+      </div>
+      <div>
+        {plans.map((plan, planIndex) => (
+          <div
+            id={`comparison-panel-${plan}`}
+            role="tabpanel"
+            class={clsx("comparison-panel", planIndex > 0 && "hidden")}
+          >
+            <table class="w-full border-collapse text-left text-sm/5">
+              <colgroup>
+                <col class="w-3/4" />
+                <col class="w-1/4" />
+              </colgroup>
+              {features.map((group) => (
+                <tbody>
+                  <tr>
+                    <th
+                      colspan={2}
+                      scope="colgroup"
+                      class="border-t border-b border-t-olive-950/5 border-b-olive-950/10 pt-14 pb-4 font-semibold text-olive-950 dark:border-t-white/5 dark:border-b-white/10 dark:text-white"
+                    >
+                      {group.title}
+                    </th>
+                  </tr>
+                  {group.features.map((feature) => {
+                    const value = isRecord(feature.value) && plan in feature.value
+                      ? feature.value[plan]
+                      : feature.value
+
+                    return (
+                      <tr class="group">
+                        <th
+                          scope="row"
+                          class="border-t border-olive-950/5 py-4 pr-3 font-normal text-olive-700 group-first:border-olive-950/10 dark:border-white/5 dark:text-olive-400 dark:group-first:border-white/10"
+                        >
+                          {feature.name}
+                        </th>
+                        <td class="border-t border-olive-950/5 px-3 py-4 text-center text-olive-700 group-first:border-olive-950/10 dark:border-white/10 dark:text-olive-400 dark:group-first:border-white/10">
+                          <div class="flex justify-center items-center">
+                            {value === true ? (
+                              <CheckmarkIcon aria-label="Included" class="stroke-olive-950 dark:stroke-white" />
+                            ) : value === false ? (
+                              <MinusIcon aria-label="Not included" class="stroke-olive-950 dark:stroke-white" />
+                            ) : (
+                              value
+                            )}
+                          </div>
+                        </td>
+                      </tr>
+                    )
+                  })}
+                </tbody>
+              ))}
+            </table>
+          </div>
+        ))}
+      </div>
+    </div>
+  </Container>
+</section>
+
+<script>
+  function setupComparisonTabs() {
+    const containers = document.querySelectorAll('.comparison-tabs-container');
+    containers.forEach(container => {
+      const buttons = container.querySelectorAll('.comparison-tab-btn');
+      const panels = container.querySelectorAll('.comparison-panel');
+
+      buttons.forEach(button => {
+        button.addEventListener('click', () => {
+          const tab = button.getAttribute('data-tab');
+          
+          buttons.forEach(btn => btn.setAttribute('aria-selected', 'false'));
+          button.setAttribute('aria-selected', 'true');
+
+          panels.forEach(panel => {
+            if (panel.id === `comparison-panel-${tab}`) {
+              panel.classList.remove('hidden');
+            } else {
+              panel.classList.add('hidden');
+            }
+          });
+        });
+      });
+    });
+  }
+
+  // Setup on initial load
+  setupComparisonTabs();
+
+  // Setup on view transitions if active
+  document.addEventListener('astro:after-swap', setupComparisonTabs);
+</script>

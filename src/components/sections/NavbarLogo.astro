@@ -1,0 +1,14 @@
+---
+import { clsx } from 'clsx/lite'
+
+interface Props {
+  href: string
+  class?: string
+  [key: string]: any
+}
+
+const { href, class: className, ...props } = Astro.props
+---
+<a href={href} class={clsx('inline-flex items-stretch', className)} {...props}>
+  <slot />
+</a>

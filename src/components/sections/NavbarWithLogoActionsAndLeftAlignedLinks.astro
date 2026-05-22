@@ -1,0 +1,97 @@
+---
+import { clsx } from 'clsx/lite'
+
+interface Props {
+  class?: string
+  [key: string]: any
+}
+
+const { class: className, ...props } = Astro.props
+---
+<header class={clsx('sticky top-0 z-10 bg-olive-100 dark:bg-olive-950', className)} {...props}>
+  <style>:root { --scroll-padding-top: 5.25rem }</style>
+  <nav>
+    <div class="mx-auto flex h-(--scroll-padding-top) max-w-7xl items-center gap-4 px-6 lg:px-10">
+      <div class="flex flex-1 items-center gap-12">
+        <div class="flex items-center">
+          <slot name="logo" />
+        </div>
+        <div class="flex gap-8 max-lg:hidden">
+          <slot name="links" />
+        </div>
+      </div>
+      <div class="flex flex-1 items-center justify-end gap-4">
+        <div class="flex shrink-0 items-center gap-5">
+          <slot name="actions" />
+        </div>
+
+        <button
+          aria-haspopup="dialog"
+          aria-controls="mobile-menu-left"
+          aria-label="Toggle menu"
+          class="mobile-menu-left-open-btn inline-flex rounded-full p-1.5 text-olive-950 hover:bg-olive-950/10 lg:hidden dark:text-white dark:hover:bg-white/10"
+        >
+          <svg viewBox="0 0 24 24" fill="currentColor" class="size-6">
+            <path
+              fill-rule="evenodd"
+              d="M3.748 8.248a.75.75 0 0 1 .75-.75h15a.75.75 0 0 1 0 1.5h-15a.75.75 0 0 1-.75-.75ZM3.748 15.75a.75.75 0 0 1 .75-.751h15a.75.75 0 0 1 0 1.5h-15a.75.75 0 0 1-.75-.75Z"
+              clip-rule="evenodd"
+            />
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="lg:hidden">
+      <dialog id="mobile-menu-left" class="backdrop:bg-transparent w-full h-full max-w-none max-h-none m-0 bg-transparent border-none p-0 overflow-hidden">
+        <div class="fixed inset-0 bg-olive-100 px-6 py-6 lg:px-10 dark:bg-olive-950 flex flex-col">
+          <div class="flex justify-end">
+            <button
+              aria-label="Close menu"
+              class="mobile-menu-left-close-btn inline-flex rounded-full p-1.5 text-olive-950 hover:bg-olive-950/10 dark:text-white dark:hover:bg-white/10"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="size-6"
+              >
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+          <div class="mt-6 flex flex-col gap-6">
+            <slot name="links" />
+          </div>
+        </div>
+      </dialog>
+    </div>
+  </nav>
+</header>
+
+<script>
+  function setupMenuLeft() {
+    const openBtn = document.querySelector('.mobile-menu-left-open-btn');
+    const closeBtn = document.querySelector('.mobile-menu-left-close-btn');
+    const dialog = document.getElementById('mobile-menu-left') as HTMLDialogElement | null;
+
+    if (openBtn && dialog) {
+      openBtn.addEventListener('click', () => {
+        dialog.showModal();
+        document.body.style.overflow = 'hidden';
+      });
+    }
+
+    if (closeBtn && dialog) {
+      closeBtn.addEventListener('click', () => {
+        dialog.close();
+        document.body.style.overflow = '';
+      });
+    }
+  }
+
+  setupMenuLeft();
+  document.addEventListener('astro:after-swap', setupMenuLeft);
+</script>

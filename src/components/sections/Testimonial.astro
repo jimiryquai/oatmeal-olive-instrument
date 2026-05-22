@@ -1,0 +1,35 @@
+---
+import { clsx } from 'clsx/lite'
+
+interface Props {
+  quote?: string
+  img?: string
+  name: string
+  byline: string
+  class?: string
+  [key: string]: any
+}
+
+const { quote, img, name, byline, class: className, ...props } = Astro.props
+---
+<figure
+  class={clsx(
+    'flex flex-col justify-between gap-10 rounded-md bg-olive-950/2.5 p-6 text-sm/7 text-olive-950 dark:bg-white/5 dark:text-white',
+    className,
+  )}
+  {...props}
+>
+  <blockquote class="relative flex flex-col gap-4 *:first:before:absolute *:first:before:inline *:first:before:-translate-x-full *:first:before:content-['“'] *:last:after:inline *:last:after:content-['”']">
+    {quote}
+    <slot name="quote" />
+  </blockquote>
+  <figcaption class="flex items-center gap-4">
+    <div class="flex size-12 overflow-hidden rounded-full outline -outline-offset-1 outline-black/5 *:size-full *:object-cover dark:outline-white/5">
+      {img ? <img src={img} alt="" /> : <slot name="img" />}
+    </div>
+    <div>
+      <p class="font-semibold">{name}</p>
+      <p class="text-olive-700 dark:text-olive-400">{byline}</p>
+    </div>
+  </figcaption>
+</figure>

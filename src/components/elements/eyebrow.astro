@@ -1,0 +1,13 @@
+---
+import { clsx } from 'clsx/lite'
+
+interface Props {
+  class?: string
+  [key: string]: any
+}
+
+const { class: className, ...props } = Astro.props
+---
+<div class={clsx('text-sm/7 font-semibold text-olive-700 dark:text-olive-400', className)} {...props}>
+  <slot />
+</div>

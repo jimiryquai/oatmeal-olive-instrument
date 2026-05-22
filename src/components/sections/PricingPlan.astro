@@ -1,0 +1,59 @@
+---
+import { clsx } from 'clsx/lite'
+import CheckmarkIcon from '../icons/checkmark-icon.astro'
+
+interface Props {
+  name: string
+  price: string
+  period?: string
+  badge?: string
+  features: string[]
+  class?: string
+  [key: string]: any
+}
+
+const {
+  name,
+  price,
+  period,
+  badge,
+  features = [],
+  class: className,
+  ...props
+} = Astro.props
+---
+<div
+  class={clsx(
+    'flex flex-col justify-between gap-6 rounded-xl bg-olive-950/2.5 p-6 sm:items-start dark:bg-white/5',
+    className,
+  )}
+  {...props}
+>
+  <div class="self-stretch">
+    <div class="flex items-center justify-between">
+      {badge && (
+        <div class="order-last inline-flex rounded-full bg-olive-950/10 px-2 text-xs/6 font-medium text-olive-950 dark:bg-white/10 dark:text-white">
+          {badge}
+        </div>
+      )}
+
+      <h3 class="text-2xl/8 tracking-tight text-olive-950 dark:text-white">{name}</h3>
+    </div>
+    <p class="mt-1 inline-flex gap-1 text-base/7">
+      <span class="text-olive-950 dark:text-white">{price}</span>
+      {period && <span class="text-olive-500 dark:text-olive-500">{period}</span>}
+    </p>
+    <div class="mt-4 flex flex-col gap-4 text-sm/6 text-olive-700 dark:text-olive-400">
+      <slot name="subheadline" />
+    </div>
+    <ul class="mt-4 space-y-2 text-sm/6 text-olive-700 dark:text-olive-400">
+      {features.map((feature) => (
+        <li class="flex gap-4">
+          <CheckmarkIcon class="h-lh shrink-0 stroke-olive-950 dark:stroke-white" />
+          <p>{feature}</p>
+        </li>
+      ))}
+    </ul>
+  </div>
+  <slot name="cta" />
+</div>

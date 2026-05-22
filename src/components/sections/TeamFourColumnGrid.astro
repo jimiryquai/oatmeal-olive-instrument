@@ -1,0 +1,16 @@
+---
+import Section from '../elements/section.astro'
+
+interface Props {
+  [key: string]: any
+}
+---
+<Section {...Astro.props}>
+  <slot name="eyebrow" slot="eyebrow" />
+  <slot name="headline" slot="headline" />
+  <slot name="subheadline" slot="subheadline" />
+  <slot name="cta" slot="cta" />
+  <ul role="list" class="grid grid-cols-2 gap-x-2 gap-y-10 md:grid-cols-3 lg:grid-cols-4">
+    <slot />
+  </ul>
+</Section>

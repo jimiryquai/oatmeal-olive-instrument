@@ -1,0 +1,38 @@
+---
+import { clsx } from 'clsx/lite'
+import Container from '../elements/container.astro'
+
+interface Props {
+  quote?: string
+  img?: string
+  name?: string
+  byline?: string
+  class?: string
+  [key: string]: any
+}
+
+const { class: className, quote, img, name, byline, ...props } = Astro.props
+---
+<section class={clsx('py-16', className)} {...props}>
+  <Container>
+    <figure class="text-olive-950 dark:text-white">
+      <blockquote class="mx-auto flex max-w-240 flex-col gap-4 text-center font-display text-[2rem]/12 tracking-tight text-pretty *:first:before:content-['“'] *:last:after:content-['”'] sm:text-5xl/16">
+        {quote}
+        <slot name="quote" />
+      </blockquote>
+      <figcaption class="mt-16 flex flex-col items-center">
+        <div class="flex size-12 overflow-hidden rounded-full outline -outline-offset-1 outline-black/5 *:size-full *:object-cover dark:outline-white/5">
+          {img ? <img src={img} alt="" /> : <slot name="img" />}
+        </div>
+        <p class="mt-4 text-center text-sm/6 font-semibold">
+          {name}
+          <slot name="name" />
+        </p>
+        <p class="text-center text-sm/6 text-olive-700 dark:text-olive-400">
+          {byline}
+          <slot name="byline" />
+        </p>
+      </figcaption>
+    </figure>
+  </Container>
+</section>

@@ -1,0 +1,69 @@
+---
+import { clsx } from 'clsx/lite'
+import Container from '../elements/container.astro'
+import Subheading from '../elements/subheading.astro'
+import Text from '../elements/text.astro'
+import CheckmarkIcon from '../icons/checkmark-icon.astro'
+
+interface Props {
+  headline?: any
+  subheadline?: any
+  price?: any
+  period?: any
+  features?: string[]
+  class?: string
+  [key: string]: any
+}
+
+const {
+  headline,
+  subheadline,
+  price,
+  period,
+  features = [],
+  class: className,
+  ...props
+} = Astro.props
+---
+<section class={clsx('py-16', className)} {...props}>
+  <Container>
+    <div class="grid grid-cols-1 gap-x-2 rounded-xl bg-olive-950/2.5 p-2 lg:grid-cols-2 dark:bg-white/5">
+      <div class="flex flex-col items-start justify-between gap-10 p-6 sm:p-10">
+        <div class="flex flex-col gap-6">
+          <Subheading>
+            {headline}
+            <slot name="headline" />
+          </Subheading>
+          <Text class="flex flex-col gap-4 text-pretty">
+            {subheadline}
+            <slot name="subheadline" />
+          </Text>
+        </div>
+        <slot name="cta" />
+      </div>
+      <div class="rounded-sm bg-olive-100 p-6 sm:p-10 dark:bg-olive-950">
+        <div class="flex items-baseline gap-2">
+          <p class="text-[5rem]/24 font-light tracking-tight text-olive-950 sm:text-8xl/32 dark:text-white">
+            {price}
+            <slot name="price" />
+          </p>
+          <Text size="lg">
+            {period}
+            <slot name="period" />
+          </Text>
+        </div>
+        <ul class="mt-6 grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-1">
+          {features.map((feature: string) => (
+            <li class="flex gap-3 text-sm/5">
+              <span class="flex size-5 shrink-0 items-center justify-center rounded-xs bg-olive-950 dark:bg-olive-700">
+                <CheckmarkIcon class="size-3 stroke-white" />
+              </span>
+              <p class="text-olive-700 dark:text-olive-400">{feature}</p>
+            </li>
+          ))}
+          <slot name="features" />
+        </ul>
+      </div>
+    </div>
+  </Container>
+</section>

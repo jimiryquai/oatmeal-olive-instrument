@@ -1,0 +1,85 @@
+---
+import CallToActionSimple from "@/components/sections/CallToActionSimple.astro";
+import CallToActionSimpleCentered from "@/components/sections/CallToActionSimpleCentered.astro";
+import ButtonLink from '@/components/elements/ButtonLink.astro'
+import PlainButtonLink from '@/components/elements/PlainButtonLink.astro';
+import ChevronIcon from "@/components/icons/chevron-icon.astro";
+
+interface Props {
+	node: {
+		_key?: string;
+		headline: string;
+		subheadline?: string;
+		variation?: "left-aligned" | "centered";
+		primaryCtaLabel?: string;
+		primaryCtaUrl?: string;
+		secondaryCtaLabel?: string;
+		secondaryCtaUrl?: string;
+	};
+}
+
+const { node } = Astro.props;
+const {
+	_key,
+	headline,
+	subheadline,
+	variation = "left-aligned",
+	primaryCtaLabel,
+	primaryCtaUrl,
+	secondaryCtaLabel,
+	secondaryCtaUrl,
+} = node;
+
+const isCentered = variation === "centered";
+const hasCta = primaryCtaLabel || secondaryCtaLabel;
+---
+
+{
+	isCentered && (
+		<CallToActionSimpleCentered
+			id={_key || "call-to-action"}
+			headline={headline}
+			subheadline={subheadline}
+		>
+			{hasCta && (
+				<div slot="cta" class="flex items-center gap-4">
+					{primaryCtaLabel && (
+						<ButtonLink href={primaryCtaUrl || "#"} size="lg">
+							{primaryCtaLabel}
+						</ButtonLink>
+					)}
+					{secondaryCtaLabel && (
+						<PlainButtonLink href={secondaryCtaUrl || "#"} size="lg">
+							{secondaryCtaLabel} <ChevronIcon class="h-lh" />
+						</PlainButtonLink>
+					)}
+				</div>
+			)}
+		</CallToActionSimpleCentered>
+	)
+}
+
+{
+	!isCentered && (
+		<CallToActionSimple
+			id={_key || "call-to-action"}
+			headline={headline}
+			subheadline={subheadline}
+		>
+			{hasCta && (
+				<div slot="cta" class="flex items-center gap-4">
+					{primaryCtaLabel && (
+						<ButtonLink href={primaryCtaUrl || "#"} size="lg">
+							{primaryCtaLabel}
+						</ButtonLink>
+					)}
+					{secondaryCtaLabel && (
+						<PlainButtonLink href={secondaryCtaUrl || "#"} size="lg">
+							{secondaryCtaLabel} <ChevronIcon class="h-lh" />
+						</PlainButtonLink>
+					)}
+				</div>
+			)}
+		</CallToActionSimple>
+	)
+}
