@@ -1,17 +1,27 @@
 ---
-import { clsx } from 'clsx/lite'
+import { clsx } from "clsx/lite";
 
 interface Props {
-  class?: string
-  [key: string]: any
+  class?: string;
+  [key: string]: any;
 }
 
-const { class: className, ...props } = Astro.props
+const { class: className, ...props } = Astro.props;
 ---
-<header class={clsx('sticky top-0 z-10 bg-olive-100 dark:bg-olive-950', className)} {...props}>
-  <style>:root { --scroll-padding-top: 5.25rem }</style>
+
+<header
+  class={clsx("sticky top-0 z-10 bg-olive-100 dark:bg-olive-950", className)}
+  {...props}
+>
+  <style>
+    :root {
+      --scroll-padding-top: 5.25rem;
+    }
+  </style>
   <nav>
-    <div class="mx-auto flex h-(--scroll-padding-top) max-w-7xl items-center gap-4 px-6 lg:px-10">
+    <div
+      class="mx-auto flex h-(--scroll-padding-top) max-w-7xl items-center gap-4 px-6 lg:px-10"
+    >
       <div class="flex flex-1 items-center">
         <slot name="logo" />
       </div>
@@ -33,63 +43,71 @@ const { class: className, ...props } = Astro.props
             <path
               fill-rule="evenodd"
               d="M3.748 8.248a.75.75 0 0 1 .75-.75h15a.75.75 0 0 1 0 1.5h-15a.75.75 0 0 1-.75-.75ZM3.748 15.75a.75.75 0 0 1 .75-.751h15a.75.75 0 0 1 0 1.5h-15a.75.75 0 0 1-.75-.75Z"
-              clip-rule="evenodd"
-            />
+              clip-rule="evenodd"></path>
           </svg>
         </button>
       </div>
     </div>
 
     <div class="lg:hidden">
-      <dialog id="mobile-menu-centered" class="backdrop:bg-transparent w-full h-full max-w-none max-h-none m-0 bg-transparent border-none p-0 overflow-hidden">
-        <div class="fixed inset-0 bg-olive-100 px-6 py-6 lg:px-10 dark:bg-olive-950 flex flex-col">
-          <div class="flex justify-end">
-            <button
-              aria-label="Close menu"
-              class="mobile-menu-centered-close-btn inline-flex rounded-full p-1.5 text-olive-950 hover:bg-olive-950/10 dark:text-white dark:hover:bg-white/10"
+      <el-dialog id="mobile-menu-centered" class="backdrop:bg-transparent">
+        <dialog class="backdrop:bg-transparent w-full h-full max-w-none max-h-none m-0 top-0 left-0 bg-transparent border-none p-0 overflow-hidden">
+          <el-dialog-panel class="w-full h-full">
+            <div
+              class="fixed inset-0 bg-olive-100 px-6 py-6 lg:px-10 dark:bg-olive-950 flex flex-col"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="currentColor"
-                class="size-6"
-              >
-                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
-              </svg>
-            </button>
-          </div>
-          <div class="mt-6 flex flex-col gap-6">
-            <slot name="links" />
-          </div>
-        </div>
-      </dialog>
+              <div class="flex justify-end">
+                <button
+                  aria-label="Close menu"
+                  class="mobile-menu-centered-close-btn inline-flex rounded-full p-1.5 text-olive-950 hover:bg-olive-950/10 dark:text-white dark:hover:bg-white/10"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                    class="size-6"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M6 18 18 6M6 6l12 12"></path>
+                  </svg>
+                </button>
+              </div>
+              <div class="mt-6 flex flex-col gap-6">
+                <slot name="links" />
+              </div>
+            </div>
+          </el-dialog-panel>
+        </dialog>
+      </el-dialog>
     </div>
   </nav>
 </header>
 
 <script>
-  function setupMenuCentered() {
-    const openBtn = document.querySelector('.mobile-menu-centered-open-btn');
-    const closeBtn = document.querySelector('.mobile-menu-centered-close-btn');
-    const dialog = document.getElementById('mobile-menu-centered') as HTMLDialogElement | null;
+  import "@tailwindplus/elements";
 
-    if (openBtn && dialog) {
-      openBtn.addEventListener('click', () => {
-        dialog.showModal();
-        document.body.style.overflow = 'hidden';
+  function setupMenuCentered() {
+    const openBtn = document.querySelector(".mobile-menu-centered-open-btn");
+    const closeBtn = document.querySelector(".mobile-menu-centered-close-btn");
+    const elDialog = document.getElementById("mobile-menu-centered") as any;
+
+    if (openBtn && elDialog) {
+      openBtn.addEventListener("click", () => {
+        elDialog.show();
       });
     }
 
-    if (closeBtn && dialog) {
-      closeBtn.addEventListener('click', () => {
-        dialog.close();
-        document.body.style.overflow = '';
+    if (closeBtn && elDialog) {
+      closeBtn.addEventListener("click", () => {
+        elDialog.hide();
       });
     }
   }
 
   setupMenuCentered();
-  document.addEventListener('astro:after-swap', setupMenuCentered);
+  document.addEventListener("astro:after-swap", setupMenuCentered);
 </script>

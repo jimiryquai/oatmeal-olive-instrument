@@ -13,6 +13,7 @@
   "dependencies": {
     "@jdevalk/astro-seo-graph": "^2.0.0",
     "@jdevalk/seo-graph-core": "^0.6.2",
+    "@tailwindplus/elements": "^1.0.22",
     "astro": "^6.3.0",
     "astro-iconset": "^0.0.4",
     "clsx": "^2.1.1",
