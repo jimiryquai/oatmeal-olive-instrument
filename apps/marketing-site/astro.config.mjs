@@ -7,6 +7,7 @@ import emdash from "emdash/astro";
 import tailwind from "@tailwindcss/vite";
 import seoPlugin from "@jdevalk/emdash-plugin-seo";
 import seoGraph from "@jdevalk/astro-seo-graph/integration";
+import { codeBlockProPlugin } from "emdash-plugin-code-block-pro";
 
 export default defineConfig({
 	site: "https://oatmeal.dev",
@@ -106,6 +107,12 @@ export default defineConfig({
 					seo.entrypoint = new URL("./node_modules/@jdevalk/emdash-plugin-seo/src/index.ts", import.meta.url).href;
 					seo.adminEntry = new URL("./node_modules/@jdevalk/emdash-plugin-seo/src/admin.tsx", import.meta.url).href;
 					return seo;
+				})(),
+				(() => {
+					const codeBlock = codeBlockProPlugin();
+					codeBlock.entrypoint = new URL("./node_modules/emdash-plugin-code-block-pro/src/index.ts", import.meta.url).href;
+					codeBlock.adminEntry = new URL("./node_modules/emdash-plugin-code-block-pro/src/admin.tsx", import.meta.url).href;
+					return codeBlock;
 				})(),
 				{
 					id: "marketing-blocks",

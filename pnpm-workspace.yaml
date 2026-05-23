@@ -18,4 +18,5 @@ blockExoticSubdeps: true
 packages:
   - 'apps/*'
   - 'packages/*'
+  - '../emdash-plugin-code-block-pro'
 
