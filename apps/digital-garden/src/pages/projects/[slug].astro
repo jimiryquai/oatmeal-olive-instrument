@@ -65,7 +65,7 @@ function getImageSrc(img: unknown): string | undefined {
 		{/* Back button */}
 		<div class="mb-8">
 			<a 
-				href="/work" 
+				href="/projects" 
 				class="inline-flex items-center gap-2 text-sm font-medium text-olive-600 dark:text-olive-400 hover:text-olive-950 dark:hover:text-white transition-colors duration-150"
 			>
 				&larr; Back to all projects
@@ -165,7 +165,7 @@ function getImageSrc(img: unknown): string | undefined {
 				<div class="flex justify-between items-baseline mb-12">
 					<h2 class="text-xs font-semibold tracking-widest uppercase text-olive-500 dark:text-olive-400">Related Projects</h2>
 					<a 
-						href="/work" 
+						href="/projects" 
 						class="text-sm font-medium text-olive-900 dark:text-white hover:text-olive-700 dark:hover:text-olive-300 transition-colors duration-150"
 					>
 						View all work &rarr;
@@ -177,7 +177,7 @@ function getImageSrc(img: unknown): string | undefined {
 							title={proj.data.title ?? "Untitled"}
 							summary={proj.data.summary}
 							featuredImage={proj.data.featured_image}
-							href={`/work/${proj.id}`}
+							href={`/projects/${proj.id}`}
 							client={proj.data.client}
 							year={proj.data.year}
 							tags={tags}

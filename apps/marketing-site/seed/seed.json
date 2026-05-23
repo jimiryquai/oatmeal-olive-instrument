@@ -415,7 +415,7 @@
 				{
 					"type": "custom",
 					"label": "Work",
-					"url": "/work"
+					"url": "/projects"
 				},
 				{
 					"type": "custom",
@@ -425,7 +425,7 @@
 				{
 					"type": "custom",
 					"label": "Blog",
-					"url": "/blog"
+					"url": "/posts"
 				}
 			]
 		},
@@ -467,7 +467,7 @@
 				{
 					"type": "custom",
 					"label": "Blog",
-					"url": "/blog"
+					"url": "/posts"
 				},
 				{
 					"type": "custom",

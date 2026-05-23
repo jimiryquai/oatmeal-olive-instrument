@@ -15,7 +15,7 @@ export const GET: APIRoute = async ({ site, url }) => {
 
 	// Add static pages
 	urls.push(`${siteUrl}/contact`);
-	urls.push(`${siteUrl}/work`);
+	urls.push(`${siteUrl}/projects`);
 
 	// Add dynamic pages
 	if (pagesResult?.entries) {
@@ -34,14 +34,14 @@ export const GET: APIRoute = async ({ site, url }) => {
 	// Add blog posts
 	if (postsResult?.entries) {
 		for (const post of postsResult.entries) {
-			urls.push(`${siteUrl}/blog/${post.id}`);
+			urls.push(`${siteUrl}/posts/${post.id}`);
 		}
 	}
 
 	// Add projects
 	if (projectsResult?.entries) {
 		for (const project of projectsResult.entries) {
-			urls.push(`${siteUrl}/work/${project.id}`);
+			urls.push(`${siteUrl}/projects/${project.id}`);
 		}
 	}
 

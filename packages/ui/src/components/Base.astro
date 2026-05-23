@@ -100,9 +100,9 @@ let ogImageUrl = `${siteUrl}/og/default.png`;
 if (content) {
 	let prefix = "pages";
 	if (content.collection === "posts") {
-		prefix = "blog";
+		prefix = "posts";
 	} else if (content.collection === "projects") {
-		prefix = "work";
+		prefix = "projects";
 	}
 	ogImageUrl = `${siteUrl}/og/${prefix}/${content.id}.png`;
 }
@@ -204,13 +204,13 @@ const personPiece = buildPiece<Person>({
 	]
 });
 
-const blogId = `${siteUrl}/blog/#blog`;
+const blogId = `${siteUrl}/posts/#blog`;
 const blogPiece = buildPiece<Blog>({
 	"@type": "Blog",
 	"@id": blogId,
 	name: siteTitle,
 	description: siteDescription,
-	url: `${siteUrl}/blog/`,
+	url: `${siteUrl}/posts/`,
 	publisher: { "@id": ids.person },
 	inLanguage: "en-US",
 });

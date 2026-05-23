@@ -51,7 +51,7 @@ const { items: results } = query
 					{results.map((result) => (
 						<li class="py-8 first:pt-0 last:pb-0 group">
 							<a
-								href={`/blog/${result.slug ?? result.id}`}
+								href={`/posts/${result.slug ?? result.id}`}
 								class="block no-underline text-inherit"
 							>
 								<h2 class="text-2xl font-semibold tracking-tight text-olive-950 dark:text-white group-hover:text-olive-750 dark:group-hover:text-olive-350 transition-colors duration-150">
