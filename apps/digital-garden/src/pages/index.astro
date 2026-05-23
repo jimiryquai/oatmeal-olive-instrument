@@ -1,0 +1,211 @@
+---
+import {
+	getEmDashCollection,
+	getTermsForEntries,
+	getSiteSettings,
+} from "emdash";
+import { Image } from "emdash/ui";
+import Base from "../layouts/Base.astro";
+import PostCard from "@jamesryan/ui/components/PostCard.astro";
+import { getReadingTime } from "@jamesryan/cms-helpers";
+import { resolveBlogSiteIdentity } from "../utils/site-identity";
+
+// Limit to what we render (1 featured + 6 grid)
+const POSTS_PER_PAGE = 7;
+
+const [{ entries: posts, cacheHint }, settings] = await Promise.all([
+	getEmDashCollection("posts", {
+		orderBy: { published_at: "desc" },
+		limit: POSTS_PER_PAGE + 1, // +1 to detect if there are more
+	}),
+	getSiteSettings(),
+]);
+const { siteTitle, siteTagline } = resolveBlogSiteIdentity(settings);
+
+if (Astro.cache?.enabled) Astro.cache.set(cacheHint);
+
+// Trim the lookahead post used to detect overflow
+const visiblePosts = posts.slice(0, POSTS_PER_PAGE);
+const hasMorePosts = posts.length > POSTS_PER_PAGE;
+
+// Find the first post with a featured image for the hero
+const featuredPost = visiblePosts.find((p) => p.data.featured_image);
+const featuredIndex = featuredPost ? visiblePosts.indexOf(featuredPost) : -1;
+
+// Get remaining posts (exclude featured if found, limit to 6 for grid)
+const gridPosts = visiblePosts.filter((_, i) => i !== featuredIndex).slice(0, 6);
+
+// Single batched query for tags across the featured post + grid posts
+const tagEntryIds = [
+	...(featuredPost ? [featuredPost.data.id] : []),
+	...gridPosts.map((p) => p.data.id),
+];
+const tagsByEntry = await getTermsForEntries("posts", tagEntryIds, "tag");
+
+const featuredTags = featuredPost
+	? (tagsByEntry.get(featuredPost.data.id) ?? []).map((t) => ({
+			slug: t.slug,
+			label: t.label,
+		}))
+	: [];
+const featuredBylines = featuredPost?.data.bylines ?? [];
+
+const gridPostsWithTags = gridPosts.map((post) => ({
+	post,
+	tags: (tagsByEntry.get(post.data.id) ?? []).map((t) => ({
+		slug: t.slug,
+		label: t.label,
+	})),
+	bylines: post.data.bylines ?? [],
+}));
+
+// Format date helper
+function formatDate(date: Date | null | undefined) {
+	if (!date) return null;
+	return date.toLocaleDateString("en-US", {
+		year: "numeric",
+		month: "long",
+		day: "numeric",
+	});
+}
+---
+
+<Base title={`Blog — ${siteTitle}`} description={siteTagline}>
+	<div class="mx-auto w-full max-w-7xl px-6 lg:px-10 py-16 sm:py-24">
+		{
+			posts.length === 0 ? (
+				<section class="flex flex-col items-center gap-4 text-center py-20 max-w-md mx-auto">
+					<h2 class="text-3xl font-semibold tracking-tight text-olive-950 dark:text-white">No posts yet</h2>
+					<p class="text-olive-700 dark:text-olive-400">Create your first post in the admin panel.</p>
+					<a 
+						href="/_emdash/admin/content/posts/new" 
+						class="mt-4 inline-block px-6 py-3 bg-olive-900 text-white dark:bg-white dark:text-olive-950 font-medium rounded-full hover:bg-olive-800 dark:hover:bg-olive-100 transition-colors duration-150"
+					>
+						Create a post
+					</a>
+				</section>
+			) : (
+				<div class="space-y-24">
+					{/* Header / Intro */}
+					<div class="max-w-2xl">
+						<p class="text-sm font-semibold tracking-widest uppercase text-olive-600 dark:text-olive-400">Our Blog</p>
+						<h1 class="mt-4 text-5xl sm:text-6xl font-display tracking-tight text-olive-950 dark:text-white">
+							Stories from the team
+						</h1>
+						<p class="mt-4 text-lg text-olive-750 dark:text-olive-455">
+							{siteTagline || "Thoughts, stories, and ideas from the Oatmeal creators."}
+						</p>
+					</div>
+
+					{/* Featured Post */}
+					{featuredPost && (
+						<section class="group relative grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+							<div class="lg:col-span-7 aspect-[16/10] w-full overflow-hidden rounded-3xl bg-olive-950/2.5 dark:bg-white/5 border border-olive-950/5 dark:border-white/5">
+								<a href={`/blog/${featuredPost.id}`} class="block w-full h-full">
+									<Image 
+										image={featuredPost.data.featured_image} 
+										class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+									/>
+								</a>
+							</div>
+							<div class="lg:col-span-5 flex flex-col justify-center">
+								<div class="flex items-center flex-wrap gap-x-2 gap-y-1 text-sm text-olive-600 dark:text-olive-400 mb-4">
+									{featuredBylines.length > 0 && (
+										<>
+											<div class="flex items-center gap-1.5 whitespace-nowrap">
+												{featuredBylines.slice(0, 2).map((credit, index) => (
+													<span class="inline-flex items-center gap-1.5">
+														{index > 0 && <span class="text-olive-400 dark:text-olive-600">,</span>}
+														{credit.byline.avatarMediaId && (
+															<img
+																src={`/_emdash/api/media/file/${credit.byline.avatarMediaId}`}
+																alt={credit.byline.displayName}
+																class="w-5 h-5 rounded-full object-cover"
+															/>
+														)}
+														<span class="font-medium text-olive-700 dark:text-olive-300">
+															{credit.byline.displayName}
+														</span>
+													</span>
+												))}
+												{featuredBylines.length > 2 && (
+													<span class="text-xs text-olive-500 ml-0.5">
+														+{featuredBylines.length - 2}
+													</span>
+												)}
+											</div>
+											<span class="w-1 h-1 rounded-full bg-olive-300 dark:bg-olive-700" />
+										</>
+									)}
+									{formatDate(featuredPost.data.publishedAt) && (
+										<time>{formatDate(featuredPost.data.publishedAt)}</time>
+									)}
+									<span class="w-1 h-1 rounded-full bg-olive-300 dark:bg-olive-700" />
+									<span>
+										{getReadingTime(featuredPost.data.content)} min read
+									</span>
+								</div>
+
+								<a href={`/blog/${featuredPost.id}`} class="block group-hover:opacity-90">
+									<h2 class="text-3xl sm:text-4xl font-semibold tracking-tight text-olive-950 dark:text-white leading-tight group-hover:text-olive-700 dark:group-hover:text-olive-300 transition-colors duration-150">
+										{featuredPost.data.title}
+									</h2>
+								</a>
+
+								{featuredPost.data.excerpt && (
+									<p class="mt-4 text-base sm:text-lg text-olive-700 dark:text-olive-400 leading-relaxed">
+										{featuredPost.data.excerpt}
+									</p>
+								)}
+
+								{featuredTags.length > 0 && (
+									<div class="mt-6 flex flex-wrap gap-2">
+										{featuredTags.map((tag) => (
+											<a 
+												href={`/tag/${tag.slug}`} 
+												class="inline-block px-3 py-1 text-xs text-olive-700 dark:text-olive-300 bg-olive-950/2.5 dark:bg-white/5 border border-olive-950/5 dark:border-white/5 rounded-full hover:text-olive-950 dark:hover:text-white hover:bg-olive-950/5 dark:hover:bg-white/10 transition-colors duration-150"
+											>
+												{tag.label}
+											</a>
+										))}
+									</div>
+								)}
+							</div>
+						</section>
+					)}
+
+					{/* Latest Posts Grid */}
+					{gridPostsWithTags.length > 0 && (
+						<section class="border-t border-olive-950/10 dark:border-white/10 pt-16">
+							<div class="flex justify-between items-baseline mb-12">
+								<h2 class="text-xs font-semibold tracking-widest uppercase text-olive-500 dark:text-olive-400">Latest Stories</h2>
+								{hasMorePosts && (
+									<a 
+										href="/blog" 
+										class="text-sm font-medium text-olive-900 dark:text-white hover:text-olive-700 dark:hover:text-olive-300 transition-colors duration-150"
+									>
+										View all posts &rarr;
+									</a>
+								)}
+							</div>
+							<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-16">
+								{gridPostsWithTags.map(({ post, tags, bylines }) => (
+									<PostCard
+										title={post.data.title ?? "Untitled"}
+										excerpt={post.data.excerpt}
+										featuredImage={post.data.featured_image}
+										href={`/blog/${post.id}`}
+										date={post.data.publishedAt ?? undefined}
+										readingTime={getReadingTime(post.data.content)}
+										tags={tags}
+										bylines={bylines}
+									/>
+								))}
+							</div>
+						</section>
+					)}
+				</div>
+			)
+		}
+	</div>
+</Base>

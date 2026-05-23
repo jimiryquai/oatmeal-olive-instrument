@@ -1,0 +1,15 @@
+---
+import SharedBase from "@jamesryan/ui/components/Base.astro";
+import "../styles/globals.css";
+
+const props = Astro.props;
+---
+<SharedBase {...props}>
+	<slot />
+	<slot name="links" slot="links" />
+	<slot name="logo" slot="logo" />
+	<slot name="actions" slot="actions" />
+	<slot name="cta" slot="cta" />
+	<slot name="fineprint" slot="fineprint" />
+	<slot name="socialLinks" slot="socialLinks" />
+</SharedBase>

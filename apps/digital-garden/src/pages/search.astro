@@ -1,0 +1,86 @@
+---
+export const prerender = false;
+
+import { search } from "emdash";
+import Base from "../layouts/Base.astro";
+
+const query = Astro.url.searchParams.get("q")?.trim() || "";
+
+const { items: results } = query
+	? await search(query, { collections: ["posts"], limit: 30 })
+	: { items: [] };
+---
+
+<Base
+	title={query ? `Search: ${query}` : "Search"}
+	description="Search blog posts"
+>
+	<div class="mx-auto w-full max-w-3xl px-6 py-16 sm:py-24">
+		<h1 class="text-4xl sm:text-5xl font-display tracking-tight text-olive-950 dark:text-white mb-8">Search</h1>
+
+		<form method="get" action="/search" class="flex gap-3 mb-10">
+			<input
+				type="search"
+				name="q"
+				value={query}
+				placeholder="Search posts..."
+				class="flex-1 px-5 py-3 bg-white dark:bg-white/5 border border-olive-950/10 dark:border-white/10 rounded-full text-olive-950 dark:text-white placeholder-olive-400 focus:outline-none focus:border-olive-900 dark:focus:border-white transition-colors duration-150"
+				autofocus
+			/>
+			<button 
+				type="submit" 
+				class="px-6 py-3 bg-olive-900 dark:bg-white text-white dark:text-olive-950 font-medium rounded-full hover:bg-olive-800 dark:hover:bg-olive-100 transition-colors duration-150 cursor-pointer"
+			>
+				Search
+			</button>
+		</form>
+
+		{
+			query && (
+				<p class="text-sm text-olive-650 dark:text-olive-400 mb-8 font-sans">
+					{results.length === 0
+						? `No results for "${query}"`
+						: `${results.length} result${results.length === 1 ? "" : "s"} for "${query}"`}
+				</p>
+			)
+		}
+
+		{
+			results.length > 0 && (
+				<ol class="flex flex-col divide-y divide-olive-950/10 dark:divide-white/10 list-none p-0 m-0">
+					{results.map((result) => (
+						<li class="py-8 first:pt-0 last:pb-0 group">
+							<a
+								href={`/blog/${result.slug ?? result.id}`}
+								class="block no-underline text-inherit"
+							>
+								<h2 class="text-2xl font-semibold tracking-tight text-olive-950 dark:text-white group-hover:text-olive-750 dark:group-hover:text-olive-350 transition-colors duration-150">
+									{result.title ?? "Untitled"}
+								</h2>
+								{result.snippet && (
+									<p class="text-base text-olive-700 dark:text-olive-400 leading-relaxed mt-2" set:html={result.snippet} />
+								)}
+							</a>
+						</li>
+					))}
+				</ol>
+			)
+		}
+
+		{!query && <p class="text-lg text-olive-500 dark:text-olive-400 font-sans">Enter a search term to find posts.</p>}
+	</div>
+</Base>
+
+<style>
+	/* FTS returns <mark> wrapping the matched terms. Highlight them nicely. */
+	.result-snippet :global(mark) {
+		background: var(--color-olive-200);
+		color: var(--color-olive-950);
+		padding: 0.1em 0.25em;
+		border-radius: 0.25rem;
+	}
+	:global(.dark) .result-snippet :global(mark) {
+		background: var(--color-olive-800);
+		color: #fff;
+	}
+</style>

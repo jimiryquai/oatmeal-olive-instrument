@@ -1,0 +1,13 @@
+@import "@jamesryan/ui/styles/globals.css";
+
+@source "../../../../packages/ui/src/**/*.astro";
+@source "../../../../packages/ui/src/**/*.ts";
+@source "../../../../packages/ui/src/**/*.tsx";
+
+:root {
+  --color-primary: #6366f1; /* Indigo */
+  --color-primary-dark: #4f46e5;
+  --color-primary-light: #818cf8;
+  --color-accent: #f472b6;  /* Pink */
+  --color-accent-light: #f9a8d4;
+}

@@ -1,0 +1,189 @@
+---
+export const prerender = false;
+
+import { getEmDashEntry, getEmDashCollection, decodeSlug, getTermsForEntries } from "emdash";
+import { Image, PortableText } from "emdash/ui";
+import Base from "../../layouts/Base.astro";
+import ProjectCard from "@jamesryan/ui/components/ProjectCard.astro";
+
+const slug = decodeSlug(Astro.params.slug);
+
+if (!slug) {
+	return Astro.redirect("/404");
+}
+
+const { entry: project, cacheHint } = await getEmDashEntry("projects", slug);
+
+if (!project) {
+	return Astro.redirect("/404");
+}
+
+if (Astro.cache?.enabled) Astro.cache.set(cacheHint);
+
+// Related projects
+const { entries: relatedProjects } = await getEmDashCollection("projects", {
+	orderBy: { published_at: "desc" },
+	limit: 3,
+});
+const otherProjects = relatedProjects.filter((p) => p.id !== project.id).slice(0, 2);
+
+// Single batched query for tags on related projects
+const relatedTagsByEntry = await getTermsForEntries(
+	"projects",
+	otherProjects.map((p) => p.data.id),
+	"tag",
+);
+
+const relatedProjectsWithTags = otherProjects.map((proj) => ({
+	project: proj,
+	tags: (relatedTagsByEntry.get(proj.data.id) ?? []).map((t) => ({
+		slug: t.slug,
+		label: t.label,
+	})),
+}));
+
+// Parse gallery
+const gallery = project.data.gallery as
+	| Array<{ url: string; alt?: string }>
+	| undefined;
+
+// Get image src for OG image
+function getImageSrc(img: unknown): string | undefined {
+	if (!img || typeof img !== "object") return undefined;
+	const image = img as Record<string, unknown>;
+	return typeof image.src === "string" ? image.src : undefined;
+}
+---
+
+<Base
+	title={project.data.title}
+	description={project.data.summary}
+	image={getImageSrc(project.data.featured_image)}
+>
+	<article class="mx-auto w-full max-w-5xl px-6 lg:px-10 py-16 sm:py-24">
+		{/* Back button */}
+		<div class="mb-8">
+			<a 
+				href="/work" 
+				class="inline-flex items-center gap-2 text-sm font-medium text-olive-600 dark:text-olive-400 hover:text-olive-950 dark:hover:text-white transition-colors duration-150"
+			>
+				&larr; Back to all projects
+			</a>
+		</div>
+
+		<header class="mb-12 border-b border-olive-950/10 dark:border-white/10 pb-8">
+			<h1 class="text-4xl sm:text-5xl lg:text-6xl font-display tracking-tight text-olive-950 dark:text-white mb-6">
+				{project.data.title}
+			</h1>
+
+			{/* Project Metadata grid */}
+			<div class="grid grid-cols-2 sm:grid-cols-4 gap-6 text-sm">
+				{project.data.client && (
+					<div>
+						<span class="block text-xs font-semibold tracking-widest uppercase text-olive-500 dark:text-olive-455 mb-1">Client</span>
+						<span class="text-olive-900 dark:text-olive-200 font-medium" {...project.edit.client}>
+							{project.data.client}
+						</span>
+					</div>
+				)}
+				{project.data.year && (
+					<div>
+						<span class="block text-xs font-semibold tracking-widest uppercase text-olive-500 dark:text-olive-455 mb-1">Year</span>
+						<span class="text-olive-900 dark:text-olive-200 font-medium" {...project.edit.year}>
+							{project.data.year}
+						</span>
+					</div>
+				)}
+				{project.data.url && (
+					<div>
+						<span class="block text-xs font-semibold tracking-widest uppercase text-olive-500 dark:text-olive-455 mb-1">Project Link</span>
+						<a 
+							href={project.data.url} 
+							target="_blank" 
+							rel="noopener noreferrer" 
+							class="inline-flex items-center gap-1 text-olive-700 dark:text-olive-300 hover:text-olive-950 dark:hover:text-white font-medium hover:underline transition-colors duration-150"
+							{...project.edit.url}
+						>
+							Visit site
+							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-3.5 h-3.5">
+								<path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+							</svg>
+						</a>
+					</div>
+				)}
+			</div>
+		</header>
+
+		{/* Large Featured Image */}
+		{project.data.featured_image && (
+			<div class="aspect-[16/9] w-full overflow-hidden rounded-3xl bg-olive-950/2.5 dark:bg-white/5 border border-olive-950/5 dark:border-white/5 shadow-md mb-16">
+				<Image 
+					image={project.data.featured_image} 
+					class="w-full h-full object-cover" 
+				/>
+			</div>
+		)}
+
+		{/* Project details content */}
+		<div class="grid grid-cols-1 lg:grid-cols-12 gap-12 mb-20">
+			<div class="lg:col-span-4">
+				<h2 class="text-xs font-semibold tracking-widest uppercase text-olive-650 dark:text-olive-400 mb-4">Project Overview</h2>
+				{project.data.summary && (
+					<p class="text-lg text-olive-900 dark:text-olive-100 font-display leading-relaxed" {...project.edit.summary}>
+						{project.data.summary}
+					</p>
+				)}
+			</div>
+			
+			<div class="lg:col-span-8 prose prose-olive dark:prose-invert max-w-none prose-h2:font-display prose-h2:text-3xl prose-p:leading-relaxed text-olive-800 dark:text-olive-300">
+				<PortableText value={project.data.content} />
+			</div>
+		</div>
+
+		{/* Gallery */}
+		{gallery && gallery.length > 0 && (
+			<section class="border-t border-olive-950/10 dark:border-white/10 pt-16 mb-20">
+				<h2 class="text-xs font-semibold tracking-widest uppercase text-olive-500 dark:text-olive-400 mb-8">Visual Gallery</h2>
+				<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+					{gallery.map((item) => (
+						<div class="overflow-hidden rounded-2xl bg-olive-950/2.5 dark:bg-white/5 border border-olive-950/5 dark:border-white/5 aspect-[4/3] group/item shadow-sm">
+							<img 
+								src={item.url} 
+								alt={item.alt || ""} 
+								class="w-full h-full object-cover transition-transform duration-500 group-hover/item:scale-[1.015]" 
+							/>
+						</div>
+					))}
+				</div>
+			</section>
+		)}
+
+		{/* Related Projects */}
+		{relatedProjectsWithTags.length > 0 && (
+			<section class="border-t border-olive-950/10 dark:border-white/10 pt-16">
+				<div class="flex justify-between items-baseline mb-12">
+					<h2 class="text-xs font-semibold tracking-widest uppercase text-olive-500 dark:text-olive-400">Related Projects</h2>
+					<a 
+						href="/work" 
+						class="text-sm font-medium text-olive-900 dark:text-white hover:text-olive-700 dark:hover:text-olive-300 transition-colors duration-150"
+					>
+						View all work &rarr;
+					</a>
+				</div>
+				<div class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
+					{relatedProjectsWithTags.map(({ project: proj, tags }) => (
+						<ProjectCard
+							title={proj.data.title ?? "Untitled"}
+							summary={proj.data.summary}
+							featuredImage={proj.data.featured_image}
+							href={`/work/${proj.id}`}
+							client={proj.data.client}
+							year={proj.data.year}
+							tags={tags}
+						/>
+					))}
+				</div>
+			</section>
+		)}
+	</article>
+</Base>
