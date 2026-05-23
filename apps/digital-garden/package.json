@@ -23,12 +23,16 @@
     "@iconify-json/ph": "^1.2.2",
     "@jamesryan/cms-helpers": "workspace:*",
     "@jamesryan/ui": "workspace:*",
+    "@jdevalk/astro-seo-graph": "^2.0.0",
+    "@jdevalk/emdash-plugin-seo": "^0.11.0",
+    "@jdevalk/seo-graph-core": "^0.6.2",
     "astro": "^6.3.0",
     "astro-iconset": "^0.0.4",
     "clsx": "^2.1.1",
     "emdash": "^0.14.0",
     "react": "^19.2.6",
-    "react-dom": "^19.2.6"
+    "react-dom": "^19.2.6",
+    "workers-og": "^0.0.27"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.7",
@@ -36,6 +40,7 @@
     "@tailwindcss/vite": "^4.3.0",
     "@types/react": "^19.2.15",
     "@types/react-dom": "^19.2.3",
+    "schema-dts": "^2.0.0",
     "tailwindcss": "^4.3.0",
     "wrangler": "^4.83.0"
   }

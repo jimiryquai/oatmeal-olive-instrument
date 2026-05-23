@@ -5,10 +5,13 @@ import icon from "astro-iconset";
 import { defineConfig, fontProviders } from "astro/config";
 import emdash from "emdash/astro";
 import tailwind from "@tailwindcss/vite";
+import seoPlugin from "@jdevalk/emdash-plugin-seo";
+import seoGraph from "@jdevalk/astro-seo-graph/integration";
 
 export default defineConfig({
+	site: "https://oatmeal.dev",
 	output: "server",
-	adapter: cloudflare({ inspectorPort: 9229 }),
+	adapter: cloudflare({ inspectorPort: process.argv.includes("dev") ? 9229 : undefined }),
 	server: {
 		port: 4321,
 	},
@@ -43,12 +46,29 @@ export default defineConfig({
 					"emdash/runtime",
 					"emdash/routes/PluginRegistry",
 					"astro/zod",
+					"emdash/page",
+					"@jdevalk/seo-graph-core",
+					"clsx/lite",
 				],
 			},
 		},
 	},
 	integrations: [
 		react(),
+		seoGraph({
+			validateH1: true,
+			validateUniqueMetadata: true,
+			validateImageAlt: true,
+			validateMetadataLength: true,
+			validateInternalLinks: {
+				skip: (href) => href.startsWith("/api/") || href.startsWith("/_emdash/"),
+			},
+			llmsTxt: {
+				title: "Oatmeal",
+				siteUrl: "https://oatmeal.dev",
+			},
+			markdownAlternate: true,
+		}),
 
 		icon({
 			// Only ship the Phosphor icons actually referenced in templates,
@@ -81,6 +101,12 @@ export default defineConfig({
 			sandboxRunner: sandbox(),
 			mcp: true,
 			plugins: [
+				(() => {
+					const seo = seoPlugin();
+					seo.entrypoint = new URL("./node_modules/@jdevalk/emdash-plugin-seo/src/index.ts", import.meta.url).href;
+					seo.adminEntry = new URL("./node_modules/@jdevalk/emdash-plugin-seo/src/admin.tsx", import.meta.url).href;
+					return seo;
+				})(),
 				{
 					id: "marketing-blocks",
 					version: "0.1.0",

@@ -48,6 +48,16 @@ pnpm bootstrap
 pnpm dev
 ```
 
+### Admin UI & Auth Dev Bypass
+
+The admin dashboards can be accessed at:
+- **Marketing Site**: [http://localhost:4321/_emdash/admin](http://localhost:4321/_emdash/admin)
+- **Digital Garden**: [http://localhost:4322/_emdash/admin](http://localhost:4322/_emdash/admin)
+
+If you ever lose or invalidate your local passkeys, you can bypass the authentication gate in development by navigating to:
+- **Marketing Site Bypass**: [http://localhost:4321/_emdash/api/setup/dev-bypass?redirect=/_emdash/admin](http://localhost:4321/_emdash/api/setup/dev-bypass?redirect=/_emdash/admin)
+- **Digital Garden Bypass**: [http://localhost:4322/_emdash/api/setup/dev-bypass?redirect=/_emdash/admin](http://localhost:4322/_emdash/api/setup/dev-bypass?redirect=/_emdash/admin)
+
 ## Deploying
 
 ```bash

@@ -1,7 +1,18 @@
 ---
-import { getMenu, getSiteSettings } from "emdash";
-import { EmDashHead } from "emdash/ui";
-import { createPublicPageContext } from "emdash/page";
+import { getMenu, getSiteSettings, type PageFragmentContribution } from "emdash";
+import Seo from "@jdevalk/astro-seo-graph/Seo.astro";
+import {
+	makeIds,
+	buildWebPage,
+	buildArticle,
+	buildWebSite,
+	buildBreadcrumbList,
+	buildImageObject,
+	buildPiece,
+	assembleGraph,
+} from "@jdevalk/seo-graph-core";
+import type { Person, Blog } from "schema-dts";
+import { createPublicPageContext, getPageRuntime } from "emdash/page";
 import NavbarWithLinksActionsAndCenteredLogo from "./sections/NavbarWithLinksActionsAndCenteredLogo.astro";
 import NavbarLink from "./sections/NavbarLink.astro";
 import NavbarLogo from "./sections/NavbarLogo.astro";
@@ -18,6 +29,24 @@ import YouTubeIcon from "./icons/social/youtube-icon.astro";
 import logoOlive from "../assets/logos/oatmeal-instrument-color-olive-950.svg";
 import logoWhite from "../assets/logos/oatmeal-instrument-color-white.svg";
 
+function renderFragment(f: PageFragmentContribution): string {
+	if (f.kind === "html") {
+		return f.html;
+	} else if (f.kind === "inline-script") {
+		const attrs = Object.entries(f.attributes || {})
+			.map(([k, v]) => `${k}="${v}"`)
+			.join(" ");
+		return `<script ${attrs}>${f.code}</script>`;
+	} else if (f.kind === "external-script") {
+		const attrs = Object.entries(f.attributes || {})
+			.map(([k, v]) => `${k}="${v}"`)
+			.join(" ");
+		const asyncAttr = f.async ? "async" : "";
+		const deferAttr = f.defer ? "defer" : "";
+		return `<script src="${f.src}" ${asyncAttr} ${deferAttr} ${attrs}></script>`;
+	}
+	return "";
+}
 
 interface Props {
 	title?: string;
@@ -64,6 +93,21 @@ const [primaryMenu, footerProduct, footerCompany, footerResources, footerLegal] 
 			getMenu("footer_legal"),
 		]);
 
+// Generate dynamic OG Image URL
+const siteUrl = Astro.site?.origin || "https://oatmeal.dev";
+const canonicalUrl = canonical || new URL(Astro.url.pathname, siteUrl).toString();
+let ogImageUrl = `${siteUrl}/og/default.png`;
+if (content) {
+	let prefix = "pages";
+	if (content.collection === "posts") {
+		prefix = "blog";
+	} else if (content.collection === "projects") {
+		prefix = "work";
+	}
+	ogImageUrl = `${siteUrl}/og/${prefix}/${content.id}.png`;
+}
+const finalOgImage = image || ogImageUrl;
+
 const pageCtx = createPublicPageContext({
 	Astro,
 	kind: "custom",
@@ -71,15 +115,186 @@ const pageCtx = createPublicPageContext({
 	title: fullTitle,
 	pageTitle: pageTitle ?? title ?? siteTitle,
 	description: description || siteDescription,
-	canonical: canonical || Astro.url.href,
-	image,
+	canonical: canonicalUrl,
+	image: finalOgImage,
 	seo: {
-		ogImage: image,
+		ogImage: finalOgImage,
 		robots: robots || undefined,
 	},
 	siteName: siteTitle,
 	content,
 });
+
+// Run EmDash runtime logic to get plugin contributions and fragments
+const runtime = getPageRuntime(Astro.locals as unknown as Record<string, unknown>);
+const pluginContributions = runtime ? await runtime.collectPageMetadata(pageCtx) : [];
+const fragments = runtime ? await runtime.collectPageFragments(pageCtx) : [];
+
+// Filter out standard SEO tags that <Seo> will output
+const extraMeta: Array<Record<string, string>> = [];
+const extraLinks: Array<Record<string, string>> = [];
+
+let seoNoindex = robots?.includes("noindex") || false;
+
+for (const c of pluginContributions) {
+	if (c.kind === "meta") {
+		if (c.name === "description" || c.name === "robots" || c.name.startsWith("twitter:")) {
+			if (c.name === "robots" && c.content?.includes("noindex")) {
+				seoNoindex = true;
+			}
+			continue;
+		}
+		extraMeta.push({ name: c.name, content: c.content });
+	} else if (c.kind === "property") {
+		if (c.property.startsWith("og:") || c.property.startsWith("twitter:")) {
+			continue;
+		}
+		extraMeta.push({ property: c.property, content: c.content });
+	} else if (c.kind === "link") {
+		if (c.rel === "canonical" || c.hreflang) {
+			continue;
+		}
+		extraLinks.push({ rel: c.rel, href: c.href, ...(c.hreflang && { hreflang: c.hreflang }) });
+	}
+}
+
+// Add favicon to extra links if settings provides it
+const faviconUrl = settings?.favicon?.url;
+if (faviconUrl) {
+	extraLinks.push({ rel: "icon", href: faviconUrl });
+}
+
+// Generate the JSON-LD schema graph
+const ids = makeIds({ siteUrl });
+
+const personImagePiece = buildImageObject({
+	id: ids.personImage,
+	url: `${siteUrl}/images/avatar.jpg`,
+	width: 400,
+	height: 400,
+}, ids);
+
+const personPiece = buildPiece<Person>({
+	"@type": "Person",
+	"@id": ids.person,
+	name: "James Ryan",
+	givenName: "James",
+	familyName: "Ryan",
+	url: `${siteUrl}/about`,
+	image: { "@id": ids.personImage },
+	sameAs: [
+		"https://www.linkedin.com/in/jamesryan.dev/",
+		"https://www.x.com/jimiryquai"
+	],
+	jobTitle: "Senior Power Platform Technical Consultant",
+	worksFor: {
+		"@type": "EmployeeRole",
+		roleName: "Senior Power Platform Technical Consultant",
+		worksFor: {
+			"@type": "Organization",
+			name: "Capgemini",
+			url: "https://www.capgemini.com/",
+		}
+	},
+	knowsAbout: [
+		"Power Platform",
+		"Software Development",
+		"Cloud Computing",
+		"Data Modeling"
+	]
+});
+
+const blogId = `${siteUrl}/blog/#blog`;
+const blogPiece = buildPiece<Blog>({
+	"@type": "Blog",
+	"@id": blogId,
+	name: siteTitle,
+	description: siteDescription,
+	url: `${siteUrl}/blog/`,
+	publisher: { "@id": ids.person },
+	inLanguage: "en-US",
+});
+
+const websitePiece = buildWebSite({
+	url: siteUrl,
+	name: siteTitle,
+	description: siteDescription,
+	publisher: { "@id": ids.person },
+	inLanguage: "en-US",
+}, ids);
+
+const segments = Astro.url.pathname.split("/").filter(Boolean);
+const breadcrumbItems = [{ name: "Home", url: siteUrl }];
+let runningPath = siteUrl;
+segments.forEach((segment) => {
+	runningPath += `/${segment}`;
+	const name = segment.charAt(0).toUpperCase() + segment.slice(1).replace(/-/g, " ");
+	breadcrumbItems.push({ name, url: runningPath });
+});
+
+const breadcrumbPiece = buildBreadcrumbList({
+	url: canonicalUrl,
+	items: breadcrumbItems,
+}, ids);
+
+let webPageType: "WebPage" | "ProfilePage" | "CollectionPage" = "WebPage";
+if (type === "collection" || type === "CollectionPage") {
+	webPageType = "CollectionPage";
+} else if (type === "profile" || type === "ProfilePage") {
+	webPageType = "ProfilePage";
+}
+
+const webPagePiece = buildWebPage({
+	url: canonicalUrl,
+	name: title || pageTitle || siteTitle,
+	isPartOf: { "@id": ids.website },
+	breadcrumb: { "@id": ids.breadcrumb(canonicalUrl) },
+	inLanguage: "en-US",
+	datePublished: publishedTime ? new Date(publishedTime) : undefined,
+	dateModified: modifiedTime ? new Date(modifiedTime) : undefined,
+	primaryImage: finalOgImage ? { "@id": ids.primaryImage(canonicalUrl) } : undefined,
+}, ids, webPageType);
+
+const primaryImagePiece = finalOgImage ? buildImageObject({
+	pageUrl: canonicalUrl,
+	url: finalOgImage,
+	width: 1200,
+	height: 630,
+}, ids) : null;
+
+const articlePiece = type === "article" ? buildArticle({
+	url: canonicalUrl,
+	isPartOf: [
+		{ "@id": ids.webPage(canonicalUrl) },
+		{ "@id": blogId }
+	] as unknown as { "@id": string },
+	author: { "@id": ids.person },
+	publisher: { "@id": ids.person },
+	headline: title || pageTitle || siteTitle,
+	description: description || siteDescription,
+	datePublished: publishedTime ? new Date(publishedTime) : new Date(),
+	dateModified: modifiedTime ? new Date(modifiedTime) : undefined,
+	image: finalOgImage ? { "@id": ids.primaryImage(canonicalUrl) } : undefined,
+}, ids, "BlogPosting") : null;
+
+const pieces: any[] = [
+	personPiece,
+	personImagePiece,
+	blogPiece,
+	websitePiece,
+	webPagePiece,
+	breadcrumbPiece,
+];
+if (primaryImagePiece) pieces.push(primaryImagePiece);
+if (articlePiece) pieces.push(articlePiece);
+
+const graph = assembleGraph(pieces, { warnOnDanglingReferences: true });
+
+// Collect head fragments from plugins
+const headFragmentsHtml = fragments
+	.filter((f) => f.placement === "head")
+	.map(renderFragment)
+	.join("\n");
 ---
 
 <!doctype html>
@@ -87,14 +302,19 @@ const pageCtx = createPublicPageContext({
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>{fullTitle}</title>
-		<EmDashHead page={pageCtx} />
-		{type === "article" && publishedTime && (
-			<meta property="article:published_time" content={publishedTime} />
-		)}
-		{type === "article" && modifiedTime && (
-			<meta property="article:modified_time" content={modifiedTime} />
-		)}
+		<Seo
+			title={fullTitle}
+			description={description || siteDescription}
+			canonical={canonicalUrl}
+			ogType={type === "article" ? "article" : "website"}
+			ogImage={finalOgImage}
+			siteName={siteTitle}
+			graph={graph}
+			noindex={seoNoindex}
+			extraLinks={extraLinks}
+			extraMeta={extraMeta}
+		/>
+		<Fragment set:html={headFragmentsHtml} />
 		<script is:inline>
 			// Apply theme immediately to prevent flash
 			(function () {

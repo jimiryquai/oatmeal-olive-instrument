@@ -1,5 +1,6 @@
 ---
 import Base from "../layouts/Base.astro";
+import FuzzyRedirect from "@jdevalk/astro-seo-graph/FuzzyRedirect.astro";
 ---
 
 <Base title="Page not found">
@@ -7,6 +8,9 @@ import Base from "../layouts/Base.astro";
 		<div class="not-found-code">404</div>
 		<h1>Page not found</h1>
 		<p>The page you're looking for doesn't exist or has been moved.</p>
+		<div class="fuzzy-redirect-container">
+			<FuzzyRedirect sitemapUrl="/sitemap.xml" />
+		</div>
 		<div class="not-found-actions">
 			<a href="/" class="btn btn-primary btn-lg">Go home</a>
 			<a href="/contact" class="btn btn-secondary btn-lg">Contact us</a>
@@ -43,7 +47,24 @@ import Base from "../layouts/Base.astro";
 	.not-found p {
 		font-size: var(--font-size-lg);
 		color: var(--color-muted);
+		margin-bottom: var(--spacing-lg);
+	}
+
+	.fuzzy-redirect-container {
 		margin-bottom: var(--spacing-2xl);
+		padding: var(--spacing-md) var(--spacing-lg);
+		background-color: var(--color-surface, #ffffff);
+		border: 1px solid var(--color-border, #e5e7eb);
+		border-radius: var(--radius);
+		display: inline-block;
+		font-size: var(--font-size-base);
+		color: var(--color-text);
+	}
+
+	.fuzzy-redirect-container :global(a) {
+		color: var(--color-primary);
+		font-weight: 600;
+		text-decoration: underline;
 	}
 
 	.not-found-actions {
