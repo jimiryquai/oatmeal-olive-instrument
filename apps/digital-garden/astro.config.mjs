@@ -29,6 +29,11 @@ export default defineConfig({
 			watch: {
 				ignored: ["**/.wrangler/**"],
 			},
+			fs: {
+				allow: [
+					new URL("../../../", import.meta.url).pathname,
+				],
+			},
 		},
 		ssr: {
 			noExternal: [],
@@ -115,6 +120,7 @@ export default defineConfig({
 					const codeBlock = codeBlockProPlugin();
 					codeBlock.entrypoint = new URL("./node_modules/emdash-plugin-code-block-pro/src/index.ts", import.meta.url).href;
 					codeBlock.adminEntry = new URL("./node_modules/emdash-plugin-code-block-pro/src/admin.tsx", import.meta.url).href;
+					codeBlock.componentsEntry = new URL("./node_modules/emdash-plugin-code-block-pro/src/astro/index.ts", import.meta.url).href;
 					return codeBlock;
 				})(),
 			],
